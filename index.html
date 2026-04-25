@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI &amp; ML</title>
+<style>
+  :root {
+    /* Spark Learning aesthetic — warm cream page, white cards */
+    --bg-0: #F7F3EE;        /* page */
+    --bg-1: #FFFFFF;        /* cards / panels */
+    --bg-2: #FAFAF7;        /* nested surfaces */
+    --ink-hi: #111111;      /* primary text */
+    --ink-mid: #555555;     /* secondary text */
+    --ink-low: #9CA3AF;     /* muted */
+    --accent: #3b82f6;      /* indigo blue */
+    --accent-hover: #2563eb;
+    --accent-soft: #eff6ff;
+    --success: #22c55e;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DB;
+
+    /* Modal: white card on dimmed backdrop */
+    --paper: #FFFFFF;
+    --paper-soft: #FAFAF7;
+    --paper-ink: #111111;
+    --paper-ink-mid: #555555;
+    --paper-accent: #3b82f6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    background: var(--bg-0);
+    color: var(--ink-hi);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  /* ============== STICKY HEADER ============== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247, 243, 238, 0.85);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 22px 32px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink-hi);
+    margin: 0;
+  }
+  .header-title .at {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .header-meta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-low);
+  }
+
+  /* ============== LAYOUT ============== */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 32px 120px;
+  }
+
+  .project {
+    margin-bottom: 64px;
+  }
+  .project:last-child { margin-bottom: 0; }
+
+  .project-title {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink-hi);
+    margin: 0 0 6px;
+  }
+  .project-blurb {
+    font-size: 14px;
+    color: var(--ink-mid);
+    margin: 0 0 22px;
+    max-width: 640px;
+  }
+
+  .benchmarks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .benchmark {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    user-select: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .benchmark:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+  .benchmark:active {
+    transform: translateY(0);
+  }
+
+  .checkbox {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-strong);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+  }
+  .checkbox:hover {
+    border-color: var(--accent-hover);
+  }
+  .checkbox.checked {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .checkbox.checked::after {
+    content: '';
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .benchmark-label {
+    flex: 1;
+    font-size: clamp(15px, 1.6vw, 17px);
+    font-weight: 500;
+    color: var(--ink-hi);
+    line-height: 1.45;
+  }
+  .benchmark.done .benchmark-label {
+    color: var(--ink-low);
+    text-decoration: line-through;
+    text-decoration-color: rgba(107, 114, 128, 0.5);
+  }
+
+  .points {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-mid);
+    background: var(--bg-2);
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============== MODAL ============== */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: backdropIn 0.2s ease-out;
+  }
+  .modal-backdrop.open { display: flex; }
+  @keyframes backdropIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: var(--paper);
+    color: var(--paper-ink);
+    border-radius: 16px;
+    width: min(900px, 95vw);
+    height: min(85vh, 920px);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    flex-shrink: 0;
+    padding: 28px 36px 22px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--paper-soft);
+  }
+  .modal-title-wrap { flex: 1; min-width: 0; }
+  .modal-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--paper-accent);
+    margin: 0 0 6px;
+  }
+  .modal-title {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--paper-ink);
+    margin: 0;
+    line-height: 1.25;
+  }
+  .modal-points {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--paper-ink-mid);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-top: 8px;
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+  }
+  .close-btn {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.06);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.15s ease;
+    color: var(--paper-ink);
+    font-size: 22px;
+    line-height: 1;
+  }
+  .close-btn:hover {
+    background: rgba(0, 0, 0, 0.12);
+    transform: scale(1.05);
+  }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 36px 36px;
+  }
+  .modal-section {
+    margin-bottom: 28px;
+  }
+  .modal-section:last-child { margin-bottom: 0; }
+  .modal-section h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--paper-accent);
+    margin: 0 0 10px;
+  }
+  .modal-section p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-ink);
+    margin: 0 0 12px;
+  }
+  .modal-section ul {
+    margin: 0;
+    padding-left: 22px;
+    color: var(--paper-ink);
+  }
+  .modal-section ul li {
+    margin-bottom: 6px;
+    line-height: 1.55;
+  }
+
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+  }
+  .video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .links a {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--paper-ink);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 8px 8px 0;
+    transition: background 0.15s ease;
+  }
+  .links a:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .rubric {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+  .rubric-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .rubric-row:last-child { border-bottom: none; }
+  .rubric-criterion { font-weight: 500; color: var(--paper-ink); flex: 1; }
+  .rubric-points {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--paper-accent);
+    flex-shrink: 0;
+  }
+
+  /* ============== ARTIFACT COUNT BADGE (on benchmark row) ============== */
+  .artifact-count {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    font-variant-numeric: tabular-nums;
+  }
+  .artifact-count svg { width: 12px; height: 12px; }
+
+  /* ============== GALLERY (inside modal) ============== */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .gallery-tile {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.15s ease;
+  }
+  .gallery-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+  }
+  .gallery-tile img,
+  .gallery-tile video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-tile .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    pointer-events: none;
+  }
+  .gallery-tile .tile-caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 14px 8px 6px;
+    background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0));
+    color: white;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .gallery-tile .tile-caption .tile-name {
+    font-weight: 700;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .gallery-tile .tile-caption .tile-desc {
+    display: none;
+  }
+  .gallery-tile .tile-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  body.is-admin .gallery-tile .tile-delete { display: flex; }
+  .gallery-tile .tile-delete:hover {
+    background: #ef4444;
+    transform: scale(1.1);
+  }
+
+  /* Add tile (dashed) */
+  .add-tile {
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    background: transparent;
+    border: 1.5px dashed var(--border-strong);
+    color: var(--ink-mid);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    font-weight: 600;
+    font-size: 10px;
+    text-align: center;
+    padding: 4px;
+  }
+  .add-tile:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .add-tile .plus {
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 300;
+  }
+
+  /* Upload form */
+  .upload-form {
+    grid-column: 1 / -1;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+  .upload-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-low);
+  }
+  .upload-form input[type="text"],
+  .upload-form textarea {
+    font-family: inherit;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--bg-2);
+    color: var(--paper-ink);
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    resize: vertical;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .upload-form input[type="text"]:focus,
+  .upload-form textarea:focus {
+    border-color: var(--accent);
+    background: white;
+  }
+  .upload-form input[type="file"] { display: none; }
+
+  /* Smart attachment zone */
+  .attach {
+    position: relative;
+    border: 1.5px dashed var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg-2);
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    overflow: hidden;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .attach.is-dragover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: scale(1.005);
+  }
+  .attach.has-content {
+    border-style: solid;
+    background: white;
+    cursor: default;
+    min-height: 0;
+  }
+  .attach-empty {
+    width: 100%;
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--ink-mid);
+    text-align: center;
+  }
+  .attach-empty:hover { color: var(--accent); }
+  .attach-empty .attach-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .attach-empty:hover .attach-icon { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.18); }
+  .attach-empty .attach-icon svg { width: 18px; height: 18px; }
+  .attach-empty .attach-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--paper-ink);
+  }
+  .attach-empty .attach-sub {
+    font-size: 12px;
+    color: var(--ink-low);
+  }
+  .attach-link-toggle {
+    margin-top: 4px;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.15s ease;
+  }
+  .attach-link-toggle:hover { background: var(--accent-soft); }
+
+  .attach-link-entry {
+    display: none;
+    padding: 14px;
+    width: 100%;
+    align-items: center;
+    gap: 8px;
+  }
+  .attach.is-link-entry .attach-empty { display: none; }
+  .attach.is-link-entry .attach-link-entry { display: flex; }
+  .attach-link-entry input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: white;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .attach-link-entry input:focus { border-color: var(--accent); }
+  .attach-link-entry .icon-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    transition: all 0.15s ease;
+  }
+  .attach-link-entry .icon-btn:hover { border-color: var(--ink-mid); color: var(--paper-ink); }
+
+  /* Preview card (file or link) */
+  .attach-preview {
+    display: none;
+    padding: 12px;
+    width: 100%;
+    align-items: center;
+    gap: 14px;
+  }
+  .attach.has-content .attach-preview { display: flex; }
+  .attach.has-content .attach-empty,
+  .attach.has-content .attach-link-entry { display: none; }
+  .attach-preview .preview-thumb {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 9px;
+    overflow: hidden;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--accent);
+  }
+  .attach-preview .preview-thumb img,
+  .attach-preview .preview-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .attach-preview .preview-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .attach-preview .preview-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--paper-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .attach-preview .preview-meta {
+    font-size: 12px;
+    color: var(--ink-mid);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .attach-preview .preview-remove {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .attach-preview .preview-remove:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+  .attach-preview .preview-loading {
+    font-size: 13px;
+    color: var(--ink-mid);
+    font-style: italic;
+  }
+
+  .upload-form .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .upload-form .btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    padding: 10px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.15s ease;
+  }
+  .upload-form .btn-cancel:hover { border-color: var(--border-strong); color: var(--paper-ink); }
+  .upload-form .btn-submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .upload-form .btn-submit:hover { background: var(--accent-hover); }
+  .upload-form .btn-submit:active { transform: translateY(1px); }
+  .upload-form .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .upload-form .upload-status {
+    font-size: 13px;
+    color: var(--ink-mid);
+    min-height: 18px;
+  }
+  .upload-form .upload-status.error { color: #ef4444; }
+  /* Link tile chrome */
+  .gallery-tile.link-tile .link-chip {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 5px;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .gallery-tile.link-tile .link-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: linear-gradient(135deg, var(--accent-soft), white);
+    color: var(--accent);
+    padding: 6px;
+    text-align: center;
+  }
+  .gallery-tile.link-tile .link-fallback .link-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+  .gallery-tile.link-tile .link-fallback .link-domain {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-mid);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .gallery-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--ink-low);
+    font-size: 14px;
+    padding: 8px 0 16px;
+  }
+
+  /* ============== LIGHTBOX ============== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-media {
+    max-width: min(1100px, 92vw);
+    max-height: 78vh;
+    border-radius: 12px;
+    overflow: hidden;
+    background: black;
+  }
+  .lightbox-media img,
+  .lightbox-media video {
+    display: block;
+    max-width: 100%;
+    max-height: 78vh;
+    object-fit: contain;
+  }
+  .lightbox-meta {
+    color: white;
+    text-align: center;
+    max-width: min(700px, 90vw);
+  }
+  .lightbox-meta .lb-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  .lightbox-meta .lb-desc { font-size: 14px; opacity: 0.85; line-height: 1.5; }
+  .lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .lightbox-close:hover { background: rgba(255, 255, 255, 0.22); }
+
+  /* ============== ADMIN CONTROLS ============== */
+  .admin-bar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  body.is-admin .admin-bar { display: inline-flex; }
+  .admin-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+  }
+  .archive-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--ink-mid);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .archive-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+
+  /* ============== MOBILE ============== */
+  @media (max-width: 640px) {
+    .header-inner { padding: 16px 20px; gap: 8px; flex-wrap: wrap; }
+    main { padding: 28px 20px 80px; }
+    .benchmark { padding: 14px 16px; gap: 12px; }
+    .points { font-size: 12px; padding: 4px 10px; }
+    .artifact-count { font-size: 11px; padding: 4px 8px; }
+    .modal {
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+    .modal-header { padding: 20px 22px 16px; }
+    .modal-body { padding: 20px 22px 32px; }
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1 class="header-title">AI <span class="at">&amp;</span> ML</h1>
+    <div class="header-meta">
+      AI &amp; Media Literacy
+      <span class="admin-bar">
+        <span class="admin-tag">Admin</span>
+        <button class="archive-btn" id="archiveBtn">Archive class</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modalCard">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <p class="modal-eyebrow" id="modalEyebrow">Benchmark</p>
+        <h2 class="modal-title" id="modalTitle">—</h2>
+        <span class="modal-points" id="modalPoints">— pts</span>
+      </div>
+      <button class="close-btn" id="closeBtn" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+  <div class="lightbox-media" id="lightboxMedia"></div>
+  <div class="lightbox-meta">
+    <div class="lb-name" id="lightboxName"></div>
+    <div class="lb-desc" id="lightboxDesc"></div>
+  </div>
+</div>
+
+<script type="module">
+  // ============== FIREBASE ==============
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
+  import {
+    getFirestore, collection, query, where, orderBy, onSnapshot,
+    addDoc, deleteDoc, doc, getDocs, setDoc, serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
+  import {
+    getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject
+  } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyBRiwBea5nnOuOBK9BOAuBJRp76D-9Ak7U',
+    authDomain: 'ai-ml-class-2026.firebaseapp.com',
+    projectId: 'ai-ml-class-2026',
+    storageBucket: 'ai-ml-class-2026-uploads',
+    messagingSenderId: '1004023919542',
+    appId: '1:1004023919542:web:7fedc8739121ff13fb8717'
+  };
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+  const storage = getStorage(fbApp);
+
+  // ============== ADMIN MODE ==============
+  // Visit ?admin=ramsey-aiml to enable delete buttons & "Archive class".
+  const ADMIN_TOKEN = 'ramsey-aiml';
+  const urlParams = new URLSearchParams(location.search);
+  const isAdmin = urlParams.get('admin') === ADMIN_TOKEN;
+  if (isAdmin) document.body.classList.add('is-admin');
+
+  // ============== CONTENT ==============
+  // Placeholder benchmarks — swap text/video/links/rubric in as the curriculum is built.
+  const PROJECTS = [
+    {
+      id: 'p1',
+      title: 'Project 1 - CAD',
+      benchmarks: [
+        {
+          id: 'p1b1',
+          title: 'Lorem ipsum dolor sit amet',
+          points: 5,
+          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 2 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 1 }
+          ]
+        },
+        {
+          id: 'p1b2',
+          title: 'Consectetur adipiscing elit',
+          points: 5,
+          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p1b3',
+          title: 'Sed do eiusmod tempor',
+          points: 5,
+          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        },
+        {
+          id: 'p1b4',
+          title: 'Incididunt ut labore et dolore',
+          points: 5,
+          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p1b5',
+          title: 'Magna aliqua enim ad minim',
+          points: 30,
+          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'p2',
+      title: 'Project 2 - MakeyMakey',
+      benchmarks: [
+        {
+          id: 'p2b1',
+          title: 'Quis nostrud exercitation',
+          points: 5,
+          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 2 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 1 }
+          ]
+        },
+        {
+          id: 'p2b2',
+          title: 'Ullamco laboris nisi ut aliquip',
+          points: 5,
+          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 2 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p2b3',
+          title: 'Ex ea commodo consequat',
+          points: 5,
+          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        },
+        {
+          id: 'p2b4',
+          title: 'Duis aute irure dolor',
+          points: 5,
+          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p2b5',
+          title: 'In reprehenderit voluptate',
+          points: 30,
+          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 5 },
+            { criterion: 'Placeholder criterion two', points: 4 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'p3',
+      title: 'Project 3 - XBAC',
+      benchmarks: [
+        {
+          id: 'p3b1',
+          title: 'Velit esse cillum dolore',
+          points: 5,
+          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 2 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 1 }
+          ]
+        },
+        {
+          id: 'p3b2',
+          title: 'Eu fugiat nulla pariatur',
+          points: 5,
+          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p3b3',
+          title: 'Excepteur sint occaecat',
+          points: 5,
+          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        },
+        {
+          id: 'p3b4',
+          title: 'Cupidatat non proident sunt',
+          points: 5,
+          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p3b5',
+          title: 'Culpa qui officia deserunt',
+          points: 30,
+          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'p4',
+      title: 'Project 4 - Arduino',
+      benchmarks: [
+        {
+          id: 'p4b1',
+          title: 'Mollit anim id est laborum',
+          points: 5,
+          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 2 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 1 }
+          ]
+        },
+        {
+          id: 'p4b2',
+          title: 'Sed perspiciatis unde omnis',
+          points: 5,
+          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p4b3',
+          title: 'Iste natus error voluptatem',
+          points: 5,
+          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 4 },
+            { criterion: 'Placeholder criterion two', points: 3 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        },
+        {
+          id: 'p4b4',
+          title: 'Accusantium doloremque laudantium',
+          points: 5,
+          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 3 },
+            { criterion: 'Placeholder criterion two', points: 2 },
+            { criterion: 'Placeholder criterion three', points: 2 }
+          ]
+        },
+        {
+          id: 'p4b5',
+          title: 'Totam rem aperiam eaque',
+          points: 30,
+          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { criterion: 'Placeholder criterion one', points: 5 },
+            { criterion: 'Placeholder criterion two', points: 4 },
+            { criterion: 'Placeholder criterion three', points: 3 }
+          ]
+        }
+      ]
+    }
+  ];
+
+  // ============== STATE ==============
+  const STORAGE_KEY = 'aiml-checked-v1';
+  const NAME_KEY = 'aiml-student-name-v1';
+  const checked = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+  const benchmarkCounts = {}; // { benchmarkId: count }
+  const countEls = {};        // { benchmarkId: HTMLElement }
+  let currentBenchmark = null;
+  let unsubscribeGallery = null;
+
+  function persist() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...checked]));
+  }
+
+  // ============== RENDER ==============
+  const app = document.getElementById('app');
+
+  const PAPERCLIP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>';
+
+  function renderProjects() {
+    app.innerHTML = '';
+    PROJECTS.forEach(project => {
+      const projEl = document.createElement('section');
+      projEl.className = 'project';
+      projEl.innerHTML = `
+        <h2 class="project-title">${escapeHtml(project.title)}</h2>
+        ${project.blurb ? `<p class="project-blurb">${escapeHtml(project.blurb)}</p>` : ''}
+        <div class="benchmarks"></div>
+      `;
+      const benchEl = projEl.querySelector('.benchmarks');
+      project.benchmarks.forEach(b => {
+        const isChecked = checked.has(b.id);
+        const row = document.createElement('div');
+        row.className = 'benchmark' + (isChecked ? ' done' : '');
+        row.dataset.id = b.id;
+        row.innerHTML = `
+          <div class="checkbox ${isChecked ? 'checked' : ''}" data-checkbox="${b.id}" role="checkbox" aria-checked="${isChecked}" tabindex="0"></div>
+          <div class="benchmark-label">${escapeHtml(b.title)}</div>
+          <span class="artifact-count" data-count="${b.id}" style="display:none;">${PAPERCLIP_SVG}<span data-count-num>0</span></span>
+          <div class="points">${b.points} pts</div>
+        `;
+        // open modal on click of row (not checkbox)
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('[data-checkbox]')) return;
+          openModal(b);
+        });
+        // checkbox toggle
+        const cb = row.querySelector('[data-checkbox]');
+        cb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleChecked(b.id, row, cb);
+        });
+        cb.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            toggleChecked(b.id, row, cb);
+          }
+        });
+        benchEl.appendChild(row);
+        countEls[b.id] = row.querySelector(`[data-count="${b.id}"]`);
+      });
+      app.appendChild(projEl);
+    });
+  }
+
+  function updateCountBadge(benchmarkId, n) {
+    benchmarkCounts[benchmarkId] = n;
+    const el = countEls[benchmarkId];
+    if (!el) return;
+    if (n > 0) {
+      el.style.display = 'inline-flex';
+      el.querySelector('[data-count-num]').textContent = n;
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  // Subscribe to all artifacts so count badges stay live.
+  onSnapshot(collection(db, 'artifacts'), (snap) => {
+    const counts = {};
+    snap.forEach(d => {
+      const bid = d.data().benchmarkId;
+      counts[bid] = (counts[bid] || 0) + 1;
+    });
+    // reset all known benchmarks then apply
+    Object.keys(countEls).forEach(bid => updateCountBadge(bid, counts[bid] || 0));
+  });
+
+  function toggleChecked(id, row, cb) {
+    if (checked.has(id)) {
+      checked.delete(id);
+      row.classList.remove('done');
+      cb.classList.remove('checked');
+      cb.setAttribute('aria-checked', 'false');
+    } else {
+      checked.add(id);
+      row.classList.add('done');
+      cb.classList.add('checked');
+      cb.setAttribute('aria-checked', 'true');
+    }
+    persist();
+  }
+
+  // ============== MODAL ==============
+  const modal = document.getElementById('modal');
+  const modalCard = document.getElementById('modalCard');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPoints = document.getElementById('modalPoints');
+  const modalBody = document.getElementById('modalBody');
+  const closeBtn = document.getElementById('closeBtn');
+
+  function openModal(b) {
+    currentBenchmark = b;
+    modalTitle.textContent = b.title;
+    modalPoints.textContent = `${b.points} pts`;
+    modalBody.innerHTML = '';
+
+    // Instructions
+    if (b.instructions) {
+      const sec = document.createElement('div');
+      sec.className = 'modal-section';
+      sec.innerHTML = `<h3>Instructions</h3><p>${escapeHtml(b.instructions)}</p>`;
+      modalBody.appendChild(sec);
+    }
+    // Video
+    if (b.videoUrl) {
+      const sec = document.createElement('div');
+      sec.className = 'modal-section';
+      sec.innerHTML = `
+        <h3>Helper Video</h3>
+        <div class="video-wrap">
+          <iframe src="${b.videoUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      `;
+      modalBody.appendChild(sec);
+    }
+    // Links
+    if (b.links && b.links.length) {
+      const sec = document.createElement('div');
+      sec.className = 'modal-section';
+      sec.innerHTML = `<h3>Resources</h3><div class="links">${
+        b.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${escapeHtml(l.label)}</a>`).join('')
+      }</div>`;
+      modalBody.appendChild(sec);
+    }
+    // Rubric
+    if (b.rubric && b.rubric.length) {
+      const sec = document.createElement('div');
+      sec.className = 'modal-section';
+      const total = b.rubric.reduce((s, r) => s + r.points, 0);
+      sec.innerHTML = `
+        <h3>Rubric · ${total} pts total</h3>
+        <div class="rubric">
+          ${b.rubric.map(r => `
+            <div class="rubric-row">
+              <div class="rubric-criterion">${escapeHtml(r.criterion)}</div>
+              <div class="rubric-points">${r.points} pts</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      modalBody.appendChild(sec);
+    }
+
+    // Gallery (always present — students drop work here, signals to grade)
+    const gallerySec = document.createElement('div');
+    gallerySec.className = 'modal-section';
+    gallerySec.innerHTML = `
+      <h3>Drop evidence of your work here</h3>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    `;
+    modalBody.appendChild(gallerySec);
+    subscribeGallery(b.id);
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    currentBenchmark = null;
+    if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+
+  // ============== GALLERY ==============
+  function subscribeGallery(benchmarkId) {
+    if (unsubscribeGallery) unsubscribeGallery();
+    const grid = document.getElementById('galleryGrid');
+    if (!grid) return;
+    const q = query(
+      collection(db, 'artifacts'),
+      where('benchmarkId', '==', benchmarkId)
+    );
+    unsubscribeGallery = onSnapshot(q, (snap) => {
+      const items = [];
+      snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+      // newest first
+      items.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+      renderGallery(grid, benchmarkId, items);
+    }, (err) => {
+      console.error('gallery subscribe error', err);
+      grid.innerHTML = `<div class="gallery-empty">Could not load gallery.</div>`;
+    });
+  }
+
+  function renderGallery(grid, benchmarkId, items) {
+    grid.innerHTML = '';
+    items.forEach(item => {
+      const tile = document.createElement('div');
+      const isLink = item.type === 'link';
+      const isVideo = (item.contentType || '').startsWith('video/');
+      tile.className = 'gallery-tile' + (isLink ? ' link-tile' : '');
+
+      let media;
+      if (isLink) {
+        media = item.linkImage
+          ? `<img src="${item.linkImage}" alt="${escapeHtml(item.linkTitle || item.linkUrl)}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'link-fallback',innerHTML:'<div class=\\'link-icon\\'>🔗</div><div class=\\'link-domain\\'>${escapeHtml(item.linkDomain || '')}</div>'}));" />`
+          : `<div class="link-fallback"><div class="link-icon">🔗</div><div class="link-domain">${escapeHtml(item.linkDomain || 'link')}</div></div>`;
+      } else if (isVideo) {
+        media = `<video src="${item.fileUrl}" muted preload="metadata"></video><div class="play-icon">▶</div>`;
+      } else {
+        media = `<img src="${item.fileUrl}" alt="${escapeHtml(item.studentName || '')}" loading="lazy" />`;
+      }
+
+      tile.innerHTML = `
+        ${media}
+        ${isLink ? `<span class="link-chip">Link</span>` : ''}
+        <div class="tile-caption">
+          <span class="tile-name">${escapeHtml(item.studentName || 'Unnamed')}</span>
+          <span class="tile-desc">${escapeHtml(item.description || '')}</span>
+        </div>
+        <button class="tile-delete" aria-label="Delete">×</button>
+      `;
+      tile.addEventListener('click', (e) => {
+        if (e.target.closest('.tile-delete')) return;
+        if (isLink) {
+          window.open(item.linkUrl, '_blank', 'noopener');
+        } else {
+          openLightbox(item);
+        }
+      });
+      tile.querySelector('.tile-delete').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Delete "${item.studentName}" submission?`)) return;
+        await deleteArtifact(item);
+      });
+      grid.appendChild(tile);
+    });
+    // Add tile (always last)
+    const addTile = document.createElement('div');
+    addTile.className = 'add-tile';
+    addTile.innerHTML = `<div class="plus">+</div><div>Add your work</div>`;
+    addTile.addEventListener('click', () => {
+      const form = buildUploadForm(benchmarkId, () => {
+        // re-render handled by snapshot
+      }, () => {
+        renderGallery(grid, benchmarkId, items);
+      });
+      grid.replaceChild(form, addTile);
+    });
+    grid.appendChild(addTile);
+  }
+
+  function buildUploadForm(benchmarkId, onSuccess, onCancel) {
+    const form = document.createElement('div');
+    form.className = 'upload-form';
+    const savedName = localStorage.getItem(NAME_KEY) || '';
+    const UPLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0l-5 5m5-5l5 5M4 20h16"/></svg>';
+    const LINK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>';
+
+    form.innerHTML = `
+      <label>Your name<input type="text" data-name maxlength="80" placeholder="e.g. Alex Rivera" value="${escapeHtml(savedName)}" /></label>
+      <label>Brief description<textarea data-desc rows="2" maxlength="500" placeholder="What is this and what should we look at?"></textarea></label>
+
+      <div class="attach" data-attach>
+        <div class="attach-empty" data-attach-empty>
+          <div class="attach-icon">${UPLOAD_ICON}</div>
+          <div class="attach-text">Drop a file or click to upload</div>
+          <div class="attach-sub">Image or video, up to 50MB</div>
+          <button type="button" class="attach-link-toggle" data-link-toggle>${LINK_ICON} Or paste a link</button>
+        </div>
+        <div class="attach-link-entry">
+          <input type="url" data-link-input placeholder="Paste a URL and press Enter…" />
+          <button type="button" class="icon-btn" data-link-cancel aria-label="Cancel">×</button>
+        </div>
+        <div class="attach-preview" data-preview></div>
+        <input type="file" data-file accept="image/*,video/*" />
+      </div>
+
+      <div class="upload-status" data-status></div>
+      <div class="actions">
+        <button class="btn-cancel" data-cancel type="button">Cancel</button>
+        <button class="btn-submit" data-submit type="button">Submit</button>
+      </div>
+    `;
+
+    const nameInput = form.querySelector('[data-name]');
+    const descInput = form.querySelector('[data-desc]');
+    const statusEl = form.querySelector('[data-status]');
+    const submitBtn = form.querySelector('[data-submit]');
+    const attach = form.querySelector('[data-attach]');
+    const attachEmpty = form.querySelector('[data-attach-empty]');
+    const fileInput = form.querySelector('[data-file]');
+    const linkToggle = form.querySelector('[data-link-toggle]');
+    const linkInput = form.querySelector('[data-link-input]');
+    const linkCancel = form.querySelector('[data-link-cancel]');
+    const previewEl = form.querySelector('[data-preview]');
+
+    // Attachment state
+    let attachedFile = null;
+    let attachedLink = null; // { url, preview }
+
+    function setErr(msg) {
+      statusEl.classList.add('error');
+      statusEl.textContent = msg;
+    }
+    function clearStatus() {
+      statusEl.classList.remove('error');
+      statusEl.textContent = '';
+    }
+
+    function clearAttachment() {
+      attachedFile = null;
+      attachedLink = null;
+      attach.classList.remove('has-content', 'is-link-entry');
+      previewEl.innerHTML = '';
+      fileInput.value = '';
+      linkInput.value = '';
+      clearStatus();
+    }
+
+    function attachFile(file) {
+      if (!file.type.match(/^(image|video)\//)) { setErr('File must be an image or video.'); return; }
+      if (file.size > 50 * 1024 * 1024) { setErr('File too large (50MB max).'); return; }
+      attachedFile = file;
+      attachedLink = null;
+      const isVideo = file.type.startsWith('video/');
+      const sizeKb = file.size / 1024;
+      const sizeStr = sizeKb < 1024 ? `${Math.round(sizeKb)} KB` : `${(sizeKb / 1024).toFixed(1)} MB`;
+      const objectUrl = URL.createObjectURL(file);
+      previewEl.innerHTML = `
+        <div class="preview-thumb">${isVideo ? `<video src="${objectUrl}" muted></video>` : `<img src="${objectUrl}" alt="preview" />`}</div>
+        <div class="preview-info">
+          <div class="preview-title">${escapeHtml(file.name)}</div>
+          <div class="preview-meta">${sizeStr} · ${isVideo ? 'Video' : 'Image'}</div>
+        </div>
+        <button type="button" class="preview-remove" data-preview-remove aria-label="Remove">×</button>
+      `;
+      attach.classList.add('has-content');
+      attach.classList.remove('is-link-entry');
+      previewEl.querySelector('[data-preview-remove]').addEventListener('click', clearAttachment);
+      clearStatus();
+    }
+
+    async function attachLink(url) {
+      if (!/^https?:\/\//i.test(url)) { setErr('Link must start with http:// or https://'); return; }
+      attachedFile = null;
+      attachedLink = { url, preview: null };
+      attach.classList.add('has-content');
+      attach.classList.remove('is-link-entry');
+      // loading state
+      previewEl.innerHTML = `
+        <div class="preview-thumb">${LINK_ICON_BIG}</div>
+        <div class="preview-info">
+          <div class="preview-title">${escapeHtml(url)}</div>
+          <div class="preview-meta preview-loading">Pulling preview…</div>
+        </div>
+        <button type="button" class="preview-remove" data-preview-remove aria-label="Remove">×</button>
+      `;
+      previewEl.querySelector('[data-preview-remove]').addEventListener('click', clearAttachment);
+      clearStatus();
+      try {
+        const preview = await fetchLinkPreview(url);
+        if (attachedLink?.url !== url) return; // user changed it
+        attachedLink.preview = preview;
+        const thumb = preview.image
+          ? `<img src="${preview.image}" alt="preview" onerror="this.parentElement.innerHTML='${LINK_ICON_BIG.replace(/'/g, "\\'")}';" />`
+          : LINK_ICON_BIG;
+        previewEl.innerHTML = `
+          <div class="preview-thumb">${thumb}</div>
+          <div class="preview-info">
+            <div class="preview-title">${escapeHtml(preview.title || preview.domain || url)}</div>
+            <div class="preview-meta">${escapeHtml(preview.domain || url)}</div>
+          </div>
+          <button type="button" class="preview-remove" data-preview-remove aria-label="Remove">×</button>
+        `;
+        previewEl.querySelector('[data-preview-remove]').addEventListener('click', clearAttachment);
+      } catch (err) {
+        // keep the basic preview but mark as failed
+        const meta = previewEl.querySelector('.preview-meta');
+        if (meta) meta.textContent = 'Could not pull preview · still submittable';
+      }
+    }
+
+    const LINK_ICON_BIG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>';
+
+    // Click empty zone → file picker
+    attachEmpty.addEventListener('click', (e) => {
+      if (e.target.closest('[data-link-toggle]')) return;
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) attachFile(fileInput.files[0]);
+    });
+
+    // Drag & drop on the attach zone
+    ['dragenter', 'dragover'].forEach(ev => attach.addEventListener(ev, (e) => {
+      e.preventDefault();
+      attach.classList.add('is-dragover');
+    }));
+    ['dragleave', 'drop'].forEach(ev => attach.addEventListener(ev, (e) => {
+      if (ev === 'dragleave' && e.target !== attach) return;
+      attach.classList.remove('is-dragover');
+    }));
+    attach.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const files = e.dataTransfer.files;
+      if (files && files.length) { attachFile(files[0]); return; }
+      const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
+      if (url) attachLink(url);
+    });
+
+    // Link toggle: reveal URL entry
+    linkToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      attach.classList.add('is-link-entry');
+      setTimeout(() => linkInput.focus(), 50);
+    });
+    linkCancel.addEventListener('click', () => {
+      attach.classList.remove('is-link-entry');
+      linkInput.value = '';
+    });
+    linkInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const v = linkInput.value.trim();
+        if (v) attachLink(v);
+      } else if (e.key === 'Escape') {
+        linkCancel.click();
+      }
+    });
+    // Paste a URL into the link input → auto-attach
+    linkInput.addEventListener('paste', (e) => {
+      const t = (e.clipboardData?.getData('text/plain') || '').trim();
+      if (/^https?:\/\//i.test(t)) {
+        e.preventDefault();
+        linkInput.value = t;
+        attachLink(t);
+      }
+    });
+    // Paste a URL anywhere else on the form (not in name/desc inputs) → auto-attach
+    form.addEventListener('paste', (e) => {
+      if (e.target === nameInput || e.target === descInput || e.target === linkInput) return;
+      const t = (e.clipboardData?.getData('text/plain') || '').trim();
+      if (/^https?:\/\//i.test(t)) {
+        e.preventDefault();
+        attachLink(t);
+      }
+    });
+
+    form.querySelector('[data-cancel]').addEventListener('click', onCancel);
+    submitBtn.addEventListener('click', async () => {
+      const name = nameInput.value.trim();
+      const desc = descInput.value.trim();
+      if (!name) { setErr('Please enter your name.'); return; }
+      if (!attachedFile && !attachedLink) { setErr('Drop a file or paste a link.'); return; }
+      submitBtn.disabled = true;
+      clearStatus();
+      localStorage.setItem(NAME_KEY, name);
+      try {
+        if (attachedFile) {
+          statusEl.textContent = 'Uploading…';
+          await uploadArtifact({ benchmarkId, name, desc, file: attachedFile, onProgress: (pct) => {
+            statusEl.textContent = `Uploading… ${pct}%`;
+          }});
+        } else {
+          statusEl.textContent = 'Saving…';
+          const preview = attachedLink.preview || await fetchLinkPreview(attachedLink.url);
+          await addLinkArtifact({ benchmarkId, name, desc, link: attachedLink.url, preview });
+        }
+        statusEl.textContent = 'Done.';
+        onSuccess();
+      } catch (err) {
+        console.error(err);
+        setErr(err.message || 'Submit failed. Try again.');
+        submitBtn.disabled = false;
+      }
+    });
+
+    return form;
+  }
+
+  async function fetchLinkPreview(url) {
+    try {
+      const r = await fetch(`/api/preview?url=${encodeURIComponent(url)}`);
+      if (!r.ok) throw new Error('preview');
+      return await r.json();
+    } catch (err) {
+      // Graceful degradation — submit the link with no preview metadata
+      let domain = '';
+      try { domain = new URL(url).hostname.replace(/^www\./, ''); } catch (_) {}
+      return { url, title: '', description: '', image: '', domain };
+    }
+  }
+
+  async function addLinkArtifact({ benchmarkId, name, desc, link, preview }) {
+    await addDoc(collection(db, 'artifacts'), {
+      benchmarkId,
+      studentName: name,
+      description: desc,
+      type: 'link',
+      linkUrl: link,
+      linkTitle: preview?.title || '',
+      linkDescription: preview?.description || '',
+      linkImage: preview?.image || '',
+      linkDomain: preview?.domain || '',
+      createdAt: serverTimestamp()
+    });
+  }
+
+  function uploadArtifact({ benchmarkId, name, desc, file, onProgress }) {
+    return new Promise((resolve, reject) => {
+      const ext = (file.name.match(/\.[a-z0-9]+$/i) || [''])[0];
+      const path = `artifacts/${benchmarkId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+      const ref = storageRef(storage, path);
+      const task = uploadBytesResumable(ref, file, { contentType: file.type });
+      task.on('state_changed',
+        (snap) => onProgress?.(Math.round(snap.bytesTransferred / snap.totalBytes * 100)),
+        reject,
+        async () => {
+          try {
+            const url = await getDownloadURL(task.snapshot.ref);
+            await addDoc(collection(db, 'artifacts'), {
+              benchmarkId,
+              studentName: name,
+              description: desc,
+              fileUrl: url,
+              filePath: path,
+              contentType: file.type,
+              createdAt: serverTimestamp()
+            });
+            resolve();
+          } catch (e) { reject(e); }
+        }
+      );
+    });
+  }
+
+  async function deleteArtifact(item) {
+    try {
+      if (item.filePath) {
+        try { await deleteObject(storageRef(storage, item.filePath)); } catch (e) { /* file may already be gone */ }
+      }
+      await deleteDoc(doc(db, 'artifacts', item.id));
+    } catch (err) {
+      console.error('delete failed', err);
+      alert('Could not delete. Try again.');
+    }
+  }
+
+  // ============== LIGHTBOX ==============
+  const lightbox = document.getElementById('lightbox');
+  const lightboxMedia = document.getElementById('lightboxMedia');
+  const lightboxName = document.getElementById('lightboxName');
+  const lightboxDesc = document.getElementById('lightboxDesc');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(item) {
+    const isVideo = (item.contentType || '').startsWith('video/');
+    lightboxMedia.innerHTML = isVideo
+      ? `<video src="${item.fileUrl}" controls autoplay></video>`
+      : `<img src="${item.fileUrl}" alt="${escapeHtml(item.studentName || '')}" />`;
+    lightboxName.textContent = item.studentName || 'Unnamed';
+    lightboxDesc.textContent = item.description || '';
+    lightbox.classList.add('open');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightboxMedia.innerHTML = '';
+  }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+  });
+
+  // ============== ARCHIVE (admin) ==============
+  document.getElementById('archiveBtn').addEventListener('click', async () => {
+    if (!isAdmin) return;
+    if (!confirm('Archive ALL current submissions and clear the live galleries? Old work stays accessible in Firestore as a snapshot.')) return;
+    try {
+      const snap = await getDocs(collection(db, 'artifacts'));
+      if (snap.empty) { alert('Nothing to archive.'); return; }
+      const archiveId = new Date().toISOString().replace(/[:.]/g, '-');
+      // copy each to archives/{archiveId}/artifacts/{id}
+      const copies = [];
+      snap.forEach(d => {
+        copies.push(setDoc(doc(db, 'archives', archiveId, 'artifacts', d.id), d.data()));
+      });
+      await Promise.all(copies);
+      // delete originals (Firestore doc + Storage file)
+      const deletes = [];
+      snap.forEach(d => {
+        const data = d.data();
+        if (data.filePath) {
+          deletes.push(deleteObject(storageRef(storage, data.filePath)).catch(() => {}));
+        }
+        deletes.push(deleteDoc(doc(db, 'artifacts', d.id)));
+      });
+      await Promise.all(deletes);
+      alert(`Archived ${snap.size} submissions to archives/${archiveId}.`);
+    } catch (err) {
+      console.error(err);
+      alert('Archive failed. Check console.');
+    }
+  });
+
+  // ============== UTIL ==============
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  // ============== INIT ==============
+  renderProjects();
+</script>
+
+</body>
+</html>

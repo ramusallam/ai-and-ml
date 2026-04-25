@@ -1,0 +1,11 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": [
+    {
+      "bucket": "ai-ml-class-2026-uploads",
+      "rules": "storage.rules"
+    }
+  ]
+}
