@@ -307,12 +307,15 @@
   }
   .modal-section:last-child { margin-bottom: 0; }
   .modal-section h3 {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--paper-accent);
-    margin: 0 0 10px;
+    color: var(--paper-ink);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .modal-section p {
     font-size: 16px;
@@ -383,6 +386,130 @@
     font-weight: 600;
     color: var(--paper-accent);
     flex-shrink: 0;
+  }
+
+  /* ============== HEADER NAV (Homework / Back) ============== */
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  .nav-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .nav-back { display: none; }
+  .nav-to-hw { display: inline-flex; }
+  body.view-hw .nav-back { display: inline-flex; }
+  body.view-hw .nav-to-hw { display: none; }
+
+  /* ============== HOMEWORK page ============== */
+  .week-row {
+    /* uses .benchmark styles for consistency; only overrides where needed */
+  }
+  .week-row .checkbox { display: none; } /* homework rows have no checkbox */
+  .step-section {
+    margin-bottom: 28px;
+  }
+  .step-section h3 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--paper-ink);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .step-num {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  }
+  .step-section p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper-ink);
+    margin: 0 0 14px;
+  }
+  .tinkercad-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .tinkercad-btn:hover { background: var(--accent-hover); }
+  .tinkercad-btn:active { transform: translateY(1px); }
+  .tinkercad-btn .arrow { font-size: 12px; }
+
+  /* Homework modal: two-column layout (Step 1 left, Step 2 right, no outer scroll) */
+  .modal-body.is-hw {
+    overflow: hidden;
+    padding: 24px 30px 30px;
+  }
+  .hw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    height: 100%;
+    align-items: stretch;
+  }
+  .hw-col {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .hw-col .step-section { margin-bottom: 0; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .hw-col .video-wrap { flex-shrink: 0; }
+  .hw-step2-scroll {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-right: 4px;
+    margin-right: -4px;
+  }
+  .hw-col .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+
+  @media (max-width: 720px) {
+    .hw-grid { grid-template-columns: 1fr; height: auto; gap: 20px; }
+    .modal-body.is-hw { overflow-y: auto; padding: 20px 22px 32px; }
+    .hw-col .step-section { flex: 0 0 auto; }
+    .hw-step2-scroll { overflow: visible; padding-right: 0; margin-right: 0; }
   }
 
   /* ============== ARTIFACT COUNT BADGE (on benchmark row) ============== */
@@ -956,7 +1083,9 @@
   <div class="header-inner">
     <h1 class="header-title">AI <span class="at">&amp;</span> ML</h1>
     <div class="header-meta">
-      AI &amp; Media Literacy
+      <a href="/hw" class="nav-link nav-to-hw">Homework</a>
+      <a href="/" class="nav-link nav-back">← Back to class</a>
+      <span class="header-subtitle">AI &amp; Media Literacy</span>
       <span class="admin-bar">
         <span class="admin-tag">Admin</span>
         <button class="archive-btn" id="archiveBtn">Archive class</button>
@@ -1309,6 +1438,15 @@
     }
   ];
 
+  // ============== HOMEWORK ==============
+  // 10 weeks of CAD homework. Swap title/videoUrl per week as the curriculum is built.
+  const HOMEWORK = Array.from({ length: 10 }, (_, i) => ({
+    id: `hw-w${i + 1}`,
+    week: i + 1,
+    title: `Week ${i + 1}`,
+    videoUrl: '' // placeholder — fill in YouTube embed URL per week
+  }));
+
   // ============== STATE ==============
   const STORAGE_KEY = 'aiml-checked-v1';
   const NAME_KEY = 'aiml-student-name-v1';
@@ -1397,6 +1535,31 @@
     Object.keys(countEls).forEach(bid => updateCountBadge(bid, counts[bid] || 0));
   });
 
+  // ============== HOMEWORK page render ==============
+  function renderHomework() {
+    app.innerHTML = '';
+    const sec = document.createElement('section');
+    sec.className = 'project';
+    sec.innerHTML = `
+      <h2 class="project-title">Weekly Homework</h2>
+      <div class="benchmarks" id="weekList"></div>
+    `;
+    const list = sec.querySelector('#weekList');
+    HOMEWORK.forEach(w => {
+      const row = document.createElement('div');
+      row.className = 'benchmark week-row';
+      row.dataset.id = w.id;
+      row.innerHTML = `
+        <div class="benchmark-label">${escapeHtml(w.title)}</div>
+        <span class="artifact-count" data-count="${w.id}" style="display:none;">${PAPERCLIP_SVG}<span data-count-num>0</span></span>
+      `;
+      row.addEventListener('click', () => openHomeworkModal(w));
+      list.appendChild(row);
+      countEls[w.id] = row.querySelector(`[data-count="${w.id}"]`);
+    });
+    app.appendChild(sec);
+  }
+
   function toggleChecked(id, row, cb) {
     if (checked.has(id)) {
       checked.delete(id);
@@ -1424,13 +1587,18 @@
     currentBenchmark = b;
     modalTitle.textContent = b.title;
     modalPoints.textContent = `${b.points} pts`;
+    modalPoints.style.display = '';
+    modalBody.classList.remove('is-hw');
     modalBody.innerHTML = '';
+
+    let n = 0;
+    const badge = () => `<span class="step-num">${++n}</span>`;
 
     // Instructions
     if (b.instructions) {
       const sec = document.createElement('div');
       sec.className = 'modal-section';
-      sec.innerHTML = `<h3>Instructions</h3><p>${escapeHtml(b.instructions)}</p>`;
+      sec.innerHTML = `<h3>${badge()}Instructions</h3><p>${escapeHtml(b.instructions)}</p>`;
       modalBody.appendChild(sec);
     }
     // Video
@@ -1438,7 +1606,7 @@
       const sec = document.createElement('div');
       sec.className = 'modal-section';
       sec.innerHTML = `
-        <h3>Helper Video</h3>
+        <h3>${badge()}Helper Video</h3>
         <div class="video-wrap">
           <iframe src="${b.videoUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
@@ -1449,7 +1617,7 @@
     if (b.links && b.links.length) {
       const sec = document.createElement('div');
       sec.className = 'modal-section';
-      sec.innerHTML = `<h3>Resources</h3><div class="links">${
+      sec.innerHTML = `<h3>${badge()}Resources</h3><div class="links">${
         b.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${escapeHtml(l.label)}</a>`).join('')
       }</div>`;
       modalBody.appendChild(sec);
@@ -1460,7 +1628,7 @@
       sec.className = 'modal-section';
       const total = b.rubric.reduce((s, r) => s + r.points, 0);
       sec.innerHTML = `
-        <h3>Rubric · ${total} pts total</h3>
+        <h3>${badge()}Rubric · ${total} pts total</h3>
         <div class="rubric">
           ${b.rubric.map(r => `
             <div class="rubric-row">
@@ -1477,7 +1645,7 @@
     const gallerySec = document.createElement('div');
     gallerySec.className = 'modal-section';
     gallerySec.innerHTML = `
-      <h3>Drop evidence of your work here</h3>
+      <h3>${badge()}Drop evidence of your work here</h3>
       <div class="gallery-grid" id="galleryGrid"></div>
     `;
     modalBody.appendChild(gallerySec);
@@ -1495,6 +1663,50 @@
     if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
   }
 
+  function openHomeworkModal(w) {
+    currentBenchmark = w;
+    modalTitle.textContent = w.title;
+    modalPoints.textContent = '';
+    modalPoints.style.display = 'none';
+    modalBody.innerHTML = '';
+    modalBody.classList.add('is-hw');
+
+    const videoBlock = w.videoUrl
+      ? `<div class="video-wrap"><iframe src="${w.videoUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+      : `<div class="video-wrap" style="background:#fafaf7;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink-low);font-size:13px;">Video placeholder for ${escapeHtml(w.title)}</div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'hw-grid';
+    grid.innerHTML = `
+      <div class="hw-col">
+        <div class="step-section">
+          <h3><span class="step-num">1</span>Step 1</h3>
+          <p>Watch this week's video.</p>
+          ${videoBlock}
+        </div>
+      </div>
+      <div class="hw-col">
+        <div class="step-section">
+          <h3><span class="step-num">2</span>Step 2</h3>
+          <p>Use the skills from the video to create something purposeful. Describe its purpose and provide the public link to your work below.</p>
+          <div class="hw-step2-scroll">
+            <div class="gallery-grid" id="galleryGrid"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    modalBody.appendChild(grid);
+
+    subscribeGallery(w.id, {
+      linkOnly: true,
+      descriptionPlaceholder: 'Describe the purpose of your work…'
+    });
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
@@ -1504,7 +1716,7 @@
   });
 
   // ============== GALLERY ==============
-  function subscribeGallery(benchmarkId) {
+  function subscribeGallery(benchmarkId, opts = {}) {
     if (unsubscribeGallery) unsubscribeGallery();
     const grid = document.getElementById('galleryGrid');
     if (!grid) return;
@@ -1517,14 +1729,14 @@
       snap.forEach(d => items.push({ id: d.id, ...d.data() }));
       // newest first
       items.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-      renderGallery(grid, benchmarkId, items);
+      renderGallery(grid, benchmarkId, items, opts);
     }, (err) => {
       console.error('gallery subscribe error', err);
       grid.innerHTML = `<div class="gallery-empty">Could not load gallery.</div>`;
     });
   }
 
-  function renderGallery(grid, benchmarkId, items) {
+  function renderGallery(grid, benchmarkId, items, opts = {}) {
     grid.innerHTML = '';
     items.forEach(item => {
       const tile = document.createElement('div');
@@ -1570,42 +1782,48 @@
     // Add tile (always last)
     const addTile = document.createElement('div');
     addTile.className = 'add-tile';
-    addTile.innerHTML = `<div class="plus">+</div><div>Add your work</div>`;
+    addTile.innerHTML = `<div class="plus">+</div><div>${opts.linkOnly ? 'Submit link' : 'Add your work'}</div>`;
     addTile.addEventListener('click', () => {
       const form = buildUploadForm(benchmarkId, () => {
         // re-render handled by snapshot
       }, () => {
-        renderGallery(grid, benchmarkId, items);
-      });
+        renderGallery(grid, benchmarkId, items, opts);
+      }, opts);
       grid.replaceChild(form, addTile);
     });
     grid.appendChild(addTile);
   }
 
-  function buildUploadForm(benchmarkId, onSuccess, onCancel) {
+  function buildUploadForm(benchmarkId, onSuccess, onCancel, opts = {}) {
+    const linkOnly = !!opts.linkOnly;
+    const descPlaceholder = opts.descriptionPlaceholder || 'What is this and what should we look at?';
     const form = document.createElement('div');
     form.className = 'upload-form';
     const savedName = localStorage.getItem(NAME_KEY) || '';
     const UPLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0l-5 5m5-5l5 5M4 20h16"/></svg>';
     const LINK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>';
 
+    const fileBlock = linkOnly ? '' : `
+      <div class="attach-empty" data-attach-empty>
+        <div class="attach-icon">${UPLOAD_ICON}</div>
+        <div class="attach-text">Drop a file or click to upload</div>
+        <div class="attach-sub">Image or video, up to 50MB</div>
+        <button type="button" class="attach-link-toggle" data-link-toggle>${LINK_ICON} Or paste a link</button>
+      </div>
+      <input type="file" data-file accept="image/*,video/*" />
+    `;
+
     form.innerHTML = `
       <label>Your name<input type="text" data-name maxlength="80" placeholder="e.g. Alex Rivera" value="${escapeHtml(savedName)}" /></label>
-      <label>Brief description<textarea data-desc rows="2" maxlength="500" placeholder="What is this and what should we look at?"></textarea></label>
+      <label>Brief description<textarea data-desc rows="2" maxlength="500" placeholder="${escapeHtml(descPlaceholder)}"></textarea></label>
 
-      <div class="attach" data-attach>
-        <div class="attach-empty" data-attach-empty>
-          <div class="attach-icon">${UPLOAD_ICON}</div>
-          <div class="attach-text">Drop a file or click to upload</div>
-          <div class="attach-sub">Image or video, up to 50MB</div>
-          <button type="button" class="attach-link-toggle" data-link-toggle>${LINK_ICON} Or paste a link</button>
-        </div>
+      <div class="attach ${linkOnly ? 'is-link-entry' : ''}" data-attach>
+        ${fileBlock}
         <div class="attach-link-entry">
-          <input type="url" data-link-input placeholder="Paste a URL and press Enter…" />
-          <button type="button" class="icon-btn" data-link-cancel aria-label="Cancel">×</button>
+          <input type="url" data-link-input placeholder="${linkOnly ? 'Paste a public link to your design and press Enter…' : 'Paste a URL and press Enter…'}" />
+          ${linkOnly ? '' : '<button type="button" class="icon-btn" data-link-cancel aria-label="Cancel">×</button>'}
         </div>
         <div class="attach-preview" data-preview></div>
-        <input type="file" data-file accept="image/*,video/*" />
       </div>
 
       <div class="upload-status" data-status></div>
@@ -1715,42 +1933,61 @@
 
     const LINK_ICON_BIG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>';
 
-    // Click empty zone → file picker
-    attachEmpty.addEventListener('click', (e) => {
-      if (e.target.closest('[data-link-toggle]')) return;
-      fileInput.click();
-    });
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files[0]) attachFile(fileInput.files[0]);
-    });
+    if (!linkOnly) {
+      // Click empty zone → file picker
+      attachEmpty.addEventListener('click', (e) => {
+        if (e.target.closest('[data-link-toggle]')) return;
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files[0]) attachFile(fileInput.files[0]);
+      });
 
-    // Drag & drop on the attach zone
-    ['dragenter', 'dragover'].forEach(ev => attach.addEventListener(ev, (e) => {
-      e.preventDefault();
-      attach.classList.add('is-dragover');
-    }));
-    ['dragleave', 'drop'].forEach(ev => attach.addEventListener(ev, (e) => {
-      if (ev === 'dragleave' && e.target !== attach) return;
-      attach.classList.remove('is-dragover');
-    }));
-    attach.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      if (files && files.length) { attachFile(files[0]); return; }
-      const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
-      if (url) attachLink(url);
-    });
+      // Drag & drop on the attach zone (file or URL)
+      ['dragenter', 'dragover'].forEach(ev => attach.addEventListener(ev, (e) => {
+        e.preventDefault();
+        attach.classList.add('is-dragover');
+      }));
+      ['dragleave', 'drop'].forEach(ev => attach.addEventListener(ev, (e) => {
+        if (ev === 'dragleave' && e.target !== attach) return;
+        attach.classList.remove('is-dragover');
+      }));
+      attach.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files && files.length) { attachFile(files[0]); return; }
+        const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
+        if (url) attachLink(url);
+      });
 
-    // Link toggle: reveal URL entry
-    linkToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      attach.classList.add('is-link-entry');
+      // Link toggle: reveal URL entry
+      linkToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        attach.classList.add('is-link-entry');
+        setTimeout(() => linkInput.focus(), 50);
+      });
+      linkCancel.addEventListener('click', () => {
+        attach.classList.remove('is-link-entry');
+        linkInput.value = '';
+      });
+    } else {
+      // linkOnly: drop URL anywhere on the attach zone is still useful
+      ['dragenter', 'dragover'].forEach(ev => attach.addEventListener(ev, (e) => {
+        e.preventDefault();
+        attach.classList.add('is-dragover');
+      }));
+      ['dragleave', 'drop'].forEach(ev => attach.addEventListener(ev, (e) => {
+        if (ev === 'dragleave' && e.target !== attach) return;
+        attach.classList.remove('is-dragover');
+      }));
+      attach.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
+        if (url) attachLink(url);
+      });
+      // Auto-focus the link input when form opens
       setTimeout(() => linkInput.focus(), 50);
-    });
-    linkCancel.addEventListener('click', () => {
-      attach.classList.remove('is-link-entry');
-      linkInput.value = '';
-    });
+    }
     linkInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -1784,7 +2021,7 @@
       const name = nameInput.value.trim();
       const desc = descInput.value.trim();
       if (!name) { setErr('Please enter your name.'); return; }
-      if (!attachedFile && !attachedLink) { setErr('Drop a file or paste a link.'); return; }
+      if (!attachedFile && !attachedLink) { setErr(linkOnly ? 'Paste a link to your design.' : 'Drop a file or paste a link.'); return; }
       submitBtn.disabled = true;
       clearStatus();
       localStorage.setItem(NAME_KEY, name);
@@ -1944,7 +2181,13 @@
   }
 
   // ============== INIT ==============
-  renderProjects();
+  const route = location.pathname.replace(/\/+$/, '');
+  if (route === '/hw') {
+    document.body.classList.add('view-hw');
+    renderHomework();
+  } else {
+    renderProjects();
+  }
 </script>
 
 </body>
