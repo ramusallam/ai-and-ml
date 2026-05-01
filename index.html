@@ -95,13 +95,49 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--ink-hi);
-    margin: 0 0 6px;
+    margin: 0 0 16px;
   }
   .project-blurb {
     font-size: 14px;
     color: var(--ink-mid);
     margin: 0 0 22px;
     max-width: 640px;
+  }
+
+  /* Standalone (single-benchmark) project rows — used for "Final: Publish to
+     Instructables". Bold green moment that anchors the bottom of the page. */
+  .project.is-standalone {
+    margin-top: -32px;
+  }
+  .project.is-standalone .benchmark {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.14), rgba(16, 185, 129, 0.09));
+    border: 1.5px solid rgba(34, 197, 94, 0.45);
+    box-shadow: 0 4px 18px rgba(34, 197, 94, 0.16);
+    padding: 22px 26px;
+  }
+  .project.is-standalone .benchmark:hover {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.20), rgba(16, 185, 129, 0.13));
+    border-color: rgba(34, 197, 94, 0.62);
+    box-shadow: 0 10px 26px rgba(34, 197, 94, 0.24);
+    transform: translateY(-2px);
+  }
+  .project.is-standalone .benchmark-label {
+    font-weight: 700;
+    font-size: clamp(16px, 1.7vw, 18px);
+    color: #047857;
+    letter-spacing: -0.01em;
+  }
+  .project.is-standalone .points {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #047857;
+    font-weight: 700;
+  }
+  .project.is-standalone .checkbox {
+    border-color: rgba(34, 197, 94, 0.5);
+  }
+  .project.is-standalone .checkbox:hover {
+    border-color: var(--success);
   }
 
   .benchmarks {
@@ -413,9 +449,203 @@
     background: var(--accent-soft);
   }
   .nav-back { display: none; }
-  .nav-to-hw { display: inline-flex; }
-  body.view-hw .nav-back { display: inline-flex; }
+  .nav-to-hw, .nav-to-progress { display: inline-flex; }
+  body.view-hw .nav-back, body.view-progress .nav-back { display: inline-flex; }
   body.view-hw .nav-to-hw { display: none; }
+  body.view-progress .nav-to-progress { display: none; }
+
+  /* ============== PROGRESS page ============== */
+  /* Per-student cards stacked vertically. Each card mirrors the project
+     section aesthetic on the home page: white surface, rounded corners,
+     soft shadow. Inside each card, one row per project shows the project
+     prefix, title, and 5 status pips (1 for the final row). Pips are
+     clickable when filled and deep-link to that student's gallery row. */
+  .progress-section { margin-bottom: 32px; }
+  .progress-board {
+    width: 100%;
+  }
+  .prog-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .prog-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(17, 17, 17, 0.04);
+    padding: 24px 28px 22px;
+    transition: box-shadow 0.2s ease, transform 0.12s ease;
+  }
+  .prog-card:hover {
+    box-shadow: 0 8px 22px rgba(17, 17, 17, 0.06);
+  }
+  .prog-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .prog-card-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink-hi);
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prog-card-you {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 999px;
+  }
+  .prog-card.is-you {
+    border-color: rgba(59, 130, 246, 0.35);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.12);
+  }
+  .prog-card.is-you:hover {
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.18);
+  }
+  .prog-card-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .prog-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+  }
+  .prog-card-row + .prog-card-row {
+    border-top: 1px solid rgba(17, 17, 17, 0.04);
+  }
+  .prog-card-row-label {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+  .prog-card-row-prefix {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-low);
+    flex-shrink: 0;
+    min-width: 64px;
+  }
+  .prog-card-row-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .prog-card-row-dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .prog-pip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.6px solid var(--border-strong);
+    background: var(--bg-2);
+    color: var(--ink-mid);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .prog-pip.is-done {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+    cursor: pointer;
+  }
+  .prog-pip.is-done:hover {
+    transform: scale(1.18);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  }
+  .prog-pip svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .prog-cards-empty {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px 24px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(17, 17, 17, 0.04);
+  }
+  .prog-cards-empty-line {
+    margin: 0 0 6px;
+    font-size: 15px;
+    color: var(--paper-ink);
+    font-weight: 600;
+  }
+  .prog-cards-empty-sub {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-low);
+  }
+
+  @media (max-width: 720px) {
+    .prog-card { padding: 18px 18px 16px; }
+    .prog-card-name { font-size: 18px; }
+    .prog-card-tally-num { font-size: 17px; }
+    .prog-card-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .prog-card-row-label { width: 100%; }
+    .prog-card-row-prefix { min-width: 0; }
+    .prog-card-row-dots { padding-left: 0; }
+  }
+
+  /* Instructable submission panel — single link field, slim like checkpoint */
+  .instructable-panel .inst-link-input {
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: 11px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--paper-ink);
+    background: var(--bg-1);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .instructable-panel .inst-link-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
 
   /* ============== HOMEWORK page ============== */
   .week-row {
@@ -1058,6 +1288,967 @@
     color: #ef4444;
   }
 
+  /* ============== PORTFOLIO PANEL (drop + expand) ============== */
+  .portfolio-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .portfolio-panel .pf-name-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .portfolio-panel .pf-name-row label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-low);
+  }
+  .portfolio-panel .pf-name-row input {
+    font-family: inherit;
+    font-size: 15px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--bg-2);
+    color: var(--paper-ink);
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .portfolio-panel .pf-name-row input:focus {
+    border-color: var(--accent);
+    background: white;
+  }
+
+  .pf-slots {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .pf-slot {
+    background: var(--bg-2);
+    border: 1.5px dashed var(--border-strong);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .pf-slot.is-open {
+    border-style: solid;
+    border-color: var(--accent);
+    background: white;
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.12);
+    grid-column: 1 / -1;
+  }
+  .pf-slot.is-filled:not(.is-open) {
+    border-style: solid;
+    background: white;
+    border-color: var(--border);
+  }
+  .pf-slot:hover:not(.is-open) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pf-slot.is-tile-dragover:not(.is-open) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.18);
+  }
+  .pf-slot-tile {
+    cursor: pointer;
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 120px;
+    text-align: center;
+    color: var(--ink-mid);
+    transition: color 0.15s ease;
+    position: relative;
+  }
+  .pf-slot.is-filled .pf-slot-tile { color: var(--paper-ink); }
+  .pf-slot-icon {
+    font-size: 26px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .pf-slot-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .pf-slot-status {
+    font-size: 11px;
+    color: var(--ink-low);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .pf-slot.is-filled .pf-slot-status { color: var(--success); font-weight: 600; }
+  .pf-slot-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .pf-slot-thumb img,
+  .pf-slot-thumb video {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .pf-slot-mini-actions {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .pf-slot.is-filled .pf-slot-mini-actions { opacity: 0.65; }
+  .pf-slot.is-filled:hover .pf-slot-mini-actions { opacity: 1; }
+  .pf-slot-mini-actions button {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .pf-slot-mini-actions button:hover { background: #ef4444; transform: scale(1.05); }
+
+  .pf-slot-body {
+    overflow: hidden;
+    transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+    max-height: 0;
+    opacity: 0;
+  }
+  .pf-slot.is-open .pf-slot-body {
+    max-height: 1200px;
+    opacity: 1;
+  }
+  .pf-slot-body-inner {
+    padding: 6px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pf-slot-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 8px;
+  }
+  .pf-slot-head .pf-slot-head-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--paper-ink);
+  }
+  .pf-slot-head .pf-slot-head-title .pf-slot-icon { font-size: 20px; }
+  .pf-slot-collapse {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .pf-slot-collapse:hover { border-color: var(--ink-mid); color: var(--paper-ink); }
+
+  .pf-drop {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: 11px;
+    background: var(--bg-2);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--ink-mid);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .pf-drop:hover { color: var(--accent); border-color: var(--accent); }
+  .pf-drop.is-dragover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.18);
+  }
+  .pf-drop .pf-drop-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .pf-drop .pf-drop-icon svg { width: 18px; height: 18px; }
+  .pf-drop-text { font-size: 14px; font-weight: 600; color: var(--paper-ink); }
+  .pf-drop-sub { font-size: 12px; color: var(--ink-low); }
+
+  /* ============== CHECKPOINT PANEL (benchmarks 1-4) ============== */
+  .checkpoint-panel .cp-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .checkpoint-panel .cp-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--paper-ink);
+    letter-spacing: 0.01em;
+  }
+  .checkpoint-panel .cp-reflection {
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: 11px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--paper-ink);
+    background: var(--bg-1);
+    resize: vertical;
+    min-height: 120px;
+    box-sizing: border-box;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .checkpoint-panel .cp-reflection:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .checkpoint-panel .cp-reflection::placeholder {
+    color: var(--ink-low);
+    white-space: pre-line;
+  }
+  .checkpoint-panel .cp-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--bg-2);
+  }
+  .checkpoint-panel .cp-preview[hidden] { display: none; }
+  .checkpoint-panel .cp-preview img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .checkpoint-panel .cp-preview-meta {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+  .checkpoint-panel .cp-preview-name {
+    font-size: 13px;
+    color: var(--paper-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .checkpoint-panel .cp-preview-remove {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink-low);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .checkpoint-panel .cp-preview-remove:hover {
+    background: var(--bg-1);
+    color: #ef4444;
+  }
+
+  .pf-link-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    position: relative;
+  }
+  .pf-link-row .pf-link-input-wrap {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .pf-link-row input {
+    flex: 1;
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 36px 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: white;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .pf-link-row input:focus { border-color: var(--accent); }
+  .pf-link-row .pf-link-check {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    line-height: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease;
+  }
+  .pf-link-row .pf-link-check.is-valid { opacity: 1; color: var(--success); }
+  .pf-link-row .pf-link-check.is-invalid { opacity: 1; color: #ef4444; }
+  .pf-link-row .pf-link-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--ink-low);
+    white-space: nowrap;
+  }
+
+  .pf-summary-box {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-2);
+    color: var(--paper-ink);
+    outline: none;
+    resize: vertical;
+    min-height: 110px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .pf-summary-box:focus { border-color: var(--accent); background: white; }
+  .pf-char-count {
+    font-size: 11px;
+    color: var(--ink-low);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .pf-char-count.is-warn { color: #d97706; }
+  .pf-char-count.is-over { color: #ef4444; font-weight: 600; }
+
+  .pf-filled-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-2);
+  }
+  .pf-filled-preview .pf-fp-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 9px;
+    overflow: hidden;
+    background: white;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 22px;
+  }
+  .pf-filled-preview .pf-fp-thumb img,
+  .pf-filled-preview .pf-fp-thumb video { width: 100%; height: 100%; object-fit: cover; }
+  .pf-filled-preview .pf-fp-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pf-filled-preview .pf-fp-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--paper-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pf-filled-preview .pf-fp-meta {
+    font-size: 12px;
+    color: var(--ink-mid);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pf-filled-preview .pf-fp-remove {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-mid);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+  .pf-filled-preview .pf-fp-remove:hover { border-color: #ef4444; color: #ef4444; }
+
+  .pf-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 6px;
+  }
+  .pf-status {
+    font-size: 13px;
+    color: var(--ink-mid);
+    flex: 1;
+    min-height: 18px;
+  }
+  .pf-status.is-error { color: #ef4444; }
+  .pf-submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .pf-submit:hover:not(:disabled) { background: var(--accent-hover); }
+  .pf-submit:active:not(:disabled) { transform: translateY(1px); }
+  .pf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .pf-submit.is-success {
+    background: var(--success);
+    opacity: 1;
+    cursor: default;
+    animation: submitPulse 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes submitPulse {
+    0%   { transform: scale(0.96); }
+    60%  { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  /* ============== PORTFOLIO GALLERY ============== */
+  .pf-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pf-gallery-empty {
+    text-align: center;
+    color: var(--ink-low);
+    font-size: 14px;
+    padding: 20px 0;
+  }
+  .pf-row {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    animation: pfRowIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes pfRowIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .pf-row.is-open {
+    border-color: var(--accent);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.07);
+  }
+  .pf-row-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+  }
+  .pf-row-head:hover { background: var(--bg-2); }
+  .pf-row-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--paper-ink);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pf-row-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .pf-row-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .pf-row-chip:hover { transform: translateY(-1px); background: white; }
+  .pf-row-chip .pf-chip-icon { font-size: 13px; line-height: 1; }
+  .pf-row-chip.is-empty {
+    background: transparent;
+    color: var(--ink-low);
+    border-style: dashed;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+  }
+  .pf-row-caret {
+    color: var(--ink-low);
+    font-size: 14px;
+    line-height: 1;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .pf-row.is-open .pf-row-caret { transform: rotate(90deg); }
+  .pf-row-delete {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-low);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+  body.is-admin .pf-row-delete { display: flex; }
+  .pf-row-delete:hover { border-color: #ef4444; color: #ef4444; }
+
+  .pf-row-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pf-row.is-open .pf-row-body { max-height: 2400px; }
+  .pf-row-body-inner {
+    padding: 6px 18px 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .pf-view-tile {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    position: relative;
+    min-height: 130px;
+  }
+  .pf-view-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent);
+  }
+  .pf-view-tile.is-expanded {
+    grid-column: 1 / -1;
+    cursor: default;
+  }
+  .pf-view-tile.is-expanded:hover { transform: none; }
+  .pf-view-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pf-view-head .pf-view-icon {
+    font-size: 16px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .pf-view-head .pf-view-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--ink-low);
+    flex: 1;
+  }
+  .pf-view-thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 28px;
+    position: relative;
+  }
+  .pf-view-thumb img,
+  .pf-view-thumb video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .pf-view-thumb .play-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    pointer-events: none;
+  }
+  .pf-view-tile.is-expanded .pf-view-thumb {
+    aspect-ratio: auto;
+    max-height: 60vh;
+  }
+  .pf-view-tile.is-expanded .pf-view-thumb img {
+    object-fit: contain;
+    max-height: 60vh;
+  }
+  .pf-view-tile.is-expanded .pf-view-thumb video {
+    object-fit: contain;
+    max-height: 60vh;
+  }
+  .pf-view-filename {
+    font-size: 12px;
+    color: var(--paper-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .pf-view-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.15s ease;
+    align-self: flex-start;
+  }
+  .pf-view-open:hover { background: var(--accent-hover); }
+  .pf-view-summary {
+    font-size: 13px;
+    color: var(--paper-ink);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow: hidden;
+    flex: 1;
+  }
+  .pf-view-summary.is-collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+  }
+  .pf-view-readmore {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  .pf-view-readmore:hover { text-decoration: underline; }
+  .pf-view-slot-delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.15s ease;
+    z-index: 1;
+  }
+  body.is-admin .pf-view-slot-delete { display: flex; }
+  .pf-view-slot-delete:hover { background: #ef4444; transform: scale(1.05); }
+
+  /* ============== ARCHIVE VIEWER ============== */
+  .archive-banner {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    color: #78350f;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .archive-banner .archive-banner-tag {
+    background: #d97706;
+    color: white;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-transform: uppercase;
+  }
+  .archive-banner .archive-banner-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+  .archive-banner button {
+    background: white;
+    border: 1px solid #d97706;
+    color: #78350f;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .archive-banner button:hover { background: #d97706; color: white; }
+  .archive-banner button.btn-restore { border-color: var(--success); color: #166534; }
+  .archive-banner button.btn-restore:hover { background: var(--success); color: white; }
+
+  .archive-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .archive-list-empty {
+    text-align: center;
+    color: var(--ink-low);
+    font-size: 14px;
+    padding: 28px 0;
+  }
+  .archive-list-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.18s ease, transform 0.12s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .archive-list-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+  .archive-list-item .archive-info { flex: 1; min-width: 0; }
+  .archive-list-item .archive-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper-ink);
+    margin-bottom: 3px;
+  }
+  .archive-list-item .archive-meta {
+    font-size: 12px;
+    color: var(--ink-mid);
+  }
+  .archive-list-item .archive-caret { color: var(--ink-low); font-size: 14px; }
+
+  /* "Show next 50" pager */
+  .pf-pager {
+    display: flex;
+    justify-content: center;
+    padding: 14px 0 4px;
+  }
+  .pf-pager button {
+    background: white;
+    border: 1px solid var(--border-strong);
+    color: var(--paper-ink);
+    padding: 9px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+  .pf-pager button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .pf-pager button:disabled { opacity: 0.5; cursor: default; }
+
+  /* Friendly file-unavailable placeholder */
+  .pf-broken {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-2);
+    color: var(--ink-low);
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px;
+    gap: 4px;
+  }
+  .pf-broken .pf-broken-icon { font-size: 20px; opacity: 0.6; }
+
+  /* Soft warning under upload (large file) */
+  .pf-soft-warn {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    color: #78350f;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 6px;
+  }
+
+  /* Retry button surfaced after upload failures */
+  .pf-retry-btn {
+    background: white;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.15s ease;
+  }
+  .pf-retry-btn:hover { background: #ef4444; color: white; }
+
+  /* Bound thumbnail sizes so the browser doesn't decode at full res */
+  .pf-row-chip img,
+  .pf-slot-thumb img,
+  .pf-fp-thumb img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  /* ============== TABLET ============== */
+  @media (max-width: 900px) and (min-width: 641px) {
+    .pf-slots { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .pf-slot-tile { min-height: 110px; padding: 14px 8px; }
+    .pf-slot-icon { font-size: 22px; }
+    .pf-slot-label { font-size: 11px; letter-spacing: 1px; }
+    .pf-slot-status { font-size: 10px; }
+  }
+
+  /* ============== REDUCED MOTION ============== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   /* ============== MOBILE ============== */
   @media (max-width: 640px) {
     .header-inner { padding: 16px 20px; gap: 8px; flex-wrap: wrap; }
@@ -1074,6 +2265,11 @@
     .modal-header { padding: 20px 22px 16px; }
     .modal-body { padding: 20px 22px 32px; }
     .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .pf-slots { grid-template-columns: repeat(2, 1fr); }
+    .pf-slot.is-open { grid-column: 1 / -1; }
+    .pf-row-body-inner { grid-template-columns: repeat(2, 1fr); }
+    .pf-slot-tile { min-height: 100px; padding: 14px 8px; }
+    .pf-slot-icon { font-size: 22px; }
   }
 </style>
 </head>
@@ -1084,10 +2280,11 @@
     <h1 class="header-title">AI <span class="at">&amp;</span> ML</h1>
     <div class="header-meta">
       <a href="/hw" class="nav-link nav-to-hw">Homework</a>
+      <a href="/progress" class="nav-link nav-to-progress">Progress</a>
       <a href="/" class="nav-link nav-back">← Back to class</a>
-      <span class="header-subtitle">AI &amp; Media Literacy</span>
       <span class="admin-bar">
         <span class="admin-tag">Admin</span>
+        <button class="archive-btn" id="archivesViewBtn">Archives</button>
         <button class="archive-btn" id="archiveBtn">Archive class</button>
       </span>
     </div>
@@ -1124,7 +2321,8 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
   import {
     getFirestore, collection, query, where, orderBy, onSnapshot,
-    addDoc, deleteDoc, doc, getDocs, setDoc, serverTimestamp
+    addDoc, deleteDoc, doc, getDoc, getDocs, setDoc, serverTimestamp,
+    getCountFromServer, limit, startAfter
   } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
   import {
     getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject
@@ -1151,287 +2349,129 @@
 
   // ============== CONTENT ==============
   // Placeholder benchmarks — swap text/video/links/rubric in as the curriculum is built.
+  // Placeholder content. Rename projects/benchmarks and rewrite instructions
+  // as the AI & ML class is finalized. Structure stays: 4 projects × 5
+  // benchmarks (4 work + 1 Portfolio Drop @ 50 pts) plus a Final standalone
+  // project for publishing the Instructable.
   const PROJECTS = [
     {
       id: 'p1',
-      title: 'Project 1 - CAD',
+      title: 'Project 1: Placeholder',
+      goal: 'Placeholder goal — replace with what students will build in Project 1.',
       benchmarks: [
-        {
-          id: 'p1b1',
-          title: 'Lorem ipsum dolor sit amet',
-          points: 5,
-          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 2 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 1 }
-          ]
-        },
-        {
-          id: 'p1b2',
-          title: 'Consectetur adipiscing elit',
-          points: 5,
-          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
-        {
-          id: 'p1b3',
-          title: 'Sed do eiusmod tempor',
-          points: 5,
-          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
-          ]
-        },
-        {
-          id: 'p1b4',
-          title: 'Incididunt ut labore et dolore',
-          points: 5,
-          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
+        { id: 'p1b1', title: 'Benchmark 1', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p1b2', title: 'Benchmark 2', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p1b3', title: 'Benchmark 3', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p1b4', title: 'Benchmark 4', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
         {
           id: 'p1b5',
-          title: 'Magna aliqua enim ad minim',
-          points: 30,
-          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
+          title: 'Portfolio Drop',
+          points: 50,
+          instructions: 'Submit your full portfolio for Project 1: image, video, CAD/notebook, code, and a 4-5 sentence reflection.',
           videoUrl: '',
           links: [],
           rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
+            { label: 'Image',   text: 'Upload clear picture of your final product.', points: 10 },
+            { label: 'Video',   text: 'Upload short video of your final product in action.', points: 10 },
+            { label: 'CAD',     text: 'Upload STL file(s) integrated into final product.', points: 10 },
+            { label: 'Code',    text: 'Link public code used for in final product.', points: 10 },
+            { label: 'Summary', text: '4–5 sentence reflection on prototyping final product.', points: 10 }
           ]
         }
       ]
     },
     {
       id: 'p2',
-      title: 'Project 2 - MakeyMakey',
+      title: 'Project 2: Placeholder',
+      goal: 'Placeholder goal — replace with what students will build in Project 2.',
       benchmarks: [
-        {
-          id: 'p2b1',
-          title: 'Quis nostrud exercitation',
-          points: 5,
-          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 2 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 1 }
-          ]
-        },
-        {
-          id: 'p2b2',
-          title: 'Ullamco laboris nisi ut aliquip',
-          points: 5,
-          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 2 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
-        {
-          id: 'p2b3',
-          title: 'Ex ea commodo consequat',
-          points: 5,
-          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
-          ]
-        },
-        {
-          id: 'p2b4',
-          title: 'Duis aute irure dolor',
-          points: 5,
-          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
+        { id: 'p2b1', title: 'Benchmark 1', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p2b2', title: 'Benchmark 2', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p2b3', title: 'Benchmark 3', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p2b4', title: 'Benchmark 4', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
         {
           id: 'p2b5',
-          title: 'In reprehenderit voluptate',
-          points: 30,
-          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.',
+          title: 'Portfolio Drop',
+          points: 50,
+          instructions: 'Submit your full portfolio for Project 2: image, video, CAD/notebook, code, and a 4-5 sentence reflection.',
           videoUrl: '',
           links: [],
           rubric: [
-            { criterion: 'Placeholder criterion one', points: 5 },
-            { criterion: 'Placeholder criterion two', points: 4 },
-            { criterion: 'Placeholder criterion three', points: 3 }
+            { label: 'Image',   text: 'Upload clear picture of your final product.', points: 10 },
+            { label: 'Video',   text: 'Upload short video of your final product in action.', points: 10 },
+            { label: 'CAD',     text: 'Upload STL file(s) integrated into final product.', points: 10 },
+            { label: 'Code',    text: 'Link public code used for in final product.', points: 10 },
+            { label: 'Summary', text: '4–5 sentence reflection on prototyping final product.', points: 10 }
           ]
         }
       ]
     },
     {
       id: 'p3',
-      title: 'Project 3 - XBAC',
+      title: 'Project 3: Placeholder',
+      goal: 'Placeholder goal — replace with what students will build in Project 3.',
       benchmarks: [
-        {
-          id: 'p3b1',
-          title: 'Velit esse cillum dolore',
-          points: 5,
-          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 2 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 1 }
-          ]
-        },
-        {
-          id: 'p3b2',
-          title: 'Eu fugiat nulla pariatur',
-          points: 5,
-          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
-        {
-          id: 'p3b3',
-          title: 'Excepteur sint occaecat',
-          points: 5,
-          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
-          ]
-        },
-        {
-          id: 'p3b4',
-          title: 'Cupidatat non proident sunt',
-          points: 5,
-          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
+        { id: 'p3b1', title: 'Benchmark 1', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p3b2', title: 'Benchmark 2', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p3b3', title: 'Benchmark 3', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p3b4', title: 'Benchmark 4', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
         {
           id: 'p3b5',
-          title: 'Culpa qui officia deserunt',
-          points: 30,
-          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.',
+          title: 'Portfolio Drop',
+          points: 50,
+          instructions: 'Submit your full portfolio for Project 3: image, video, CAD/notebook, code, and a 4-5 sentence reflection.',
           videoUrl: '',
           links: [],
           rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
+            { label: 'Image',   text: 'Upload clear picture of your final product.', points: 10 },
+            { label: 'Video',   text: 'Upload short video of your final product in action.', points: 10 },
+            { label: 'CAD',     text: 'Upload STL file(s) integrated into final product.', points: 10 },
+            { label: 'Code',    text: 'Link public code used for in final product.', points: 10 },
+            { label: 'Summary', text: '4–5 sentence reflection on prototyping final product.', points: 10 }
           ]
         }
       ]
     },
     {
       id: 'p4',
-      title: 'Project 4 - Arduino',
+      title: 'Project 4: Placeholder',
+      goal: 'Placeholder goal — replace with what students will build in Project 4.',
       benchmarks: [
-        {
-          id: 'p4b1',
-          title: 'Mollit anim id est laborum',
-          points: 5,
-          instructions: 'Placeholder instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 2 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 1 }
-          ]
-        },
-        {
-          id: 'p4b2',
-          title: 'Sed perspiciatis unde omnis',
-          points: 5,
-          instructions: 'Placeholder instructions. Ut enim ad minim veniam, quis nostrud exercitation.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
-        {
-          id: 'p4b3',
-          title: 'Iste natus error voluptatem',
-          points: 5,
-          instructions: 'Placeholder instructions. Duis aute irure dolor in reprehenderit in voluptate.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 4 },
-            { criterion: 'Placeholder criterion two', points: 3 },
-            { criterion: 'Placeholder criterion three', points: 3 }
-          ]
-        },
-        {
-          id: 'p4b4',
-          title: 'Accusantium doloremque laudantium',
-          points: 5,
-          instructions: 'Placeholder instructions. Excepteur sint occaecat cupidatat non proident.',
-          videoUrl: '',
-          links: [],
-          rubric: [
-            { criterion: 'Placeholder criterion one', points: 3 },
-            { criterion: 'Placeholder criterion two', points: 2 },
-            { criterion: 'Placeholder criterion three', points: 2 }
-          ]
-        },
+        { id: 'p4b1', title: 'Benchmark 1', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p4b2', title: 'Benchmark 2', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p4b3', title: 'Benchmark 3', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
+        { id: 'p4b4', title: 'Benchmark 4', points: 2, instructions: 'Placeholder instructions.', videoUrl: '', links: [], rubric: [] },
         {
           id: 'p4b5',
-          title: 'Totam rem aperiam eaque',
-          points: 30,
-          instructions: 'Placeholder instructions. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',
+          title: 'Portfolio Drop',
+          points: 50,
+          instructions: 'Submit your full final portfolio: image, video, CAD/notebook, code, and a 4-5 sentence reflection. This is the artifact you will publish to Instructables next.',
           videoUrl: '',
           links: [],
           rubric: [
-            { criterion: 'Placeholder criterion one', points: 5 },
-            { criterion: 'Placeholder criterion two', points: 4 },
-            { criterion: 'Placeholder criterion three', points: 3 }
+            { label: 'Image',   text: 'Upload clear picture of your final product.', points: 10 },
+            { label: 'Video',   text: 'Upload short video of your final product in action.', points: 10 },
+            { label: 'CAD',     text: 'Upload STL file(s) integrated into final product.', points: 10 },
+            { label: 'Code',    text: 'Link public code used for in final product.', points: 10 },
+            { label: 'Summary', text: '4–5 sentence reflection on prototyping final product.', points: 10 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'final',
+      title: 'Final: Publish to Instructables',
+      goal: 'Publish your finished project to Instructables so the world can learn from your work.',
+      benchmarks: [
+        {
+          id: 'instructable',
+          title: 'Instructable',
+          points: 50,
+          instructions: 'Publish your finished project as a step-by-step Instructable on instructables.com. Include build photos, materials list, code, and any files. Then drop the public URL below.',
+          videoUrl: '',
+          links: [],
+          rubric: [
+            { label: 'Instructable', text: 'Public link to a complete, published Instructable.', points: 50 }
           ]
         }
       ]
@@ -1439,13 +2479,29 @@
   ];
 
   // ============== HOMEWORK ==============
-  // 10 weeks of CAD homework. Swap title/videoUrl per week as the curriculum is built.
-  const HOMEWORK = Array.from({ length: 10 }, (_, i) => ({
-    id: `hw-w${i + 1}`,
-    week: i + 1,
-    title: `Week ${i + 1}`,
-    videoUrl: '' // placeholder — fill in YouTube embed URL per week
-  }));
+  // 10 weeks of CAD homework. Add a YouTube video ID per week as Ramsey feeds them in.
+  const HW_VIDEO_IDS = {
+    1: 'DtlmVaoMNMc',
+    2: 'R3ZQIJMH0-8',
+    3: 'jkqkJnOzulg',
+    4: 'DrQhAFe8dso',
+    5: 'VaxmIqkn96c',
+    6: 'MldHiSD54Jw',
+    7: '24ByEWUmJ3g',
+    8: 'fB7eejt7Vw0',
+    9: '',
+    10: ''
+  };
+  const HOMEWORK = Array.from({ length: 10 }, (_, i) => {
+    const week = i + 1;
+    const id = HW_VIDEO_IDS[week];
+    return {
+      id: `hw-w${week}`,
+      week,
+      title: `Week ${week}`,
+      videoUrl: id ? `https://www.youtube.com/embed/${id}` : ''
+    };
+  });
 
   // ============== STATE ==============
   const STORAGE_KEY = 'aiml-checked-v1';
@@ -1455,6 +2511,7 @@
   const countEls = {};        // { benchmarkId: HTMLElement }
   let currentBenchmark = null;
   let unsubscribeGallery = null;
+  let unsubscribePortfolios = null;
 
   function persist() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...checked]));
@@ -1465,26 +2522,42 @@
 
   const PAPERCLIP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>';
 
+  // Clean line-icon set for portfolio slots and previews. All icons inherit
+  // currentColor and scale with parent font-size (width/height = 1em).
+  const _SVG_ATTRS = 'width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;"';
+  const ICON_IMAGE   = `<svg ${_SVG_ATTRS}><rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.3-2.2h5.4L16 6"/></svg>`;
+  const ICON_VIDEO   = `<svg ${_SVG_ATTRS}><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10.5 9.5l4 2.5-4 2.5z" fill="currentColor" stroke="none"/></svg>`;
+  const ICON_CAD     = `<svg ${_SVG_ATTRS}><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M3.5 7.5L12 12l8.5-4.5"/><path d="M12 12v9"/></svg>`;
+  const ICON_CODE    = `<svg ${_SVG_ATTRS}><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 5l-4 14"/></svg>`;
+  const ICON_SUMMARY = `<svg ${_SVG_ATTRS}><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h8M8 9h2"/></svg>`;
+  const ICON_LINK    = `<svg ${_SVG_ATTRS}><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>`;
+  const ICON_DOC     = `<svg ${_SVG_ATTRS}><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/></svg>`;
+
   function renderProjects() {
     app.innerHTML = '';
     PROJECTS.forEach(project => {
+      // Single-benchmark projects (like the Final/Instructable) collapse into
+      // one clean row: no h2, no benchmark number, label uses the full project
+      // title so the row reads as the section's purpose.
+      const isStandalone = project.benchmarks.length === 1;
       const projEl = document.createElement('section');
-      projEl.className = 'project';
+      projEl.className = 'project' + (isStandalone ? ' is-standalone' : '');
       projEl.innerHTML = `
-        <h2 class="project-title">${escapeHtml(project.title)}</h2>
+        ${isStandalone ? '' : `<h2 class="project-title">${escapeHtml(project.title)}</h2>`}
         ${project.blurb ? `<p class="project-blurb">${escapeHtml(project.blurb)}</p>` : ''}
         <div class="benchmarks"></div>
       `;
       const benchEl = projEl.querySelector('.benchmarks');
       project.benchmarks.forEach((b, idx) => {
         const isChecked = checked.has(b.id);
+        const labelText = isStandalone ? project.title : b.title;
         const row = document.createElement('div');
         row.className = 'benchmark' + (isChecked ? ' done' : '');
         row.dataset.id = b.id;
         row.innerHTML = `
           <div class="checkbox ${isChecked ? 'checked' : ''}" data-checkbox="${b.id}" role="checkbox" aria-checked="${isChecked}" tabindex="0"></div>
-          <div class="benchmark-num">${idx + 1}</div>
-          <div class="benchmark-label">${escapeHtml(b.title)}</div>
+          ${isStandalone ? '' : `<div class="benchmark-num">${idx + 1}</div>`}
+          <div class="benchmark-label">${escapeHtml(labelText)}</div>
           <span class="artifact-count" data-count="${b.id}" style="display:none;">${PAPERCLIP_SVG}<span data-count-num>0</span></span>
           <div class="points">${b.points} pts</div>
         `;
@@ -1524,16 +2597,40 @@
     }
   }
 
-  // Subscribe to all artifacts so count badges stay live.
-  onSnapshot(collection(db, 'artifacts'), (snap) => {
-    const counts = {};
-    snap.forEach(d => {
-      const bid = d.data().benchmarkId;
-      counts[bid] = (counts[bid] || 0) + 1;
-    });
-    // reset all known benchmarks then apply
-    Object.keys(countEls).forEach(bid => updateCountBadge(bid, counts[bid] || 0));
-  });
+  // Live count badges — SCOPED for scale.
+  //
+  // Old approach: two unscoped onSnapshot listeners on the full /portfolios
+  // and /artifacts collections. At 200 students × ~5 submissions × 20
+  // benchmarks that's 20,000+ doc reads on first paint and the listener
+  // re-fires on every write.
+  //
+  // New approach:
+  //   1. Initial load: one getCountFromServer() per benchmark (server-side
+  //      aggregation, billed as 1 read each — ~30 total instead of 20,000).
+  //   2. Live updates: maintain counts locally by listening only to the
+  //      currently-OPEN benchmark's gallery (already done in
+  //      subscribePortfolios + subscribeGallery). Other badges drift only
+  //      while a different benchmark is open; refreshCountBadge() is called
+  //      after every submit/delete to re-pull the affected benchmark.
+  async function refreshCountBadge(benchmarkId) {
+    if (!benchmarkId) return;
+    const isHw = benchmarkId.startsWith('hw-');
+    const colName = isHw ? 'artifacts' : 'portfolios';
+    try {
+      const q = query(collection(db, colName), where('benchmarkId', '==', benchmarkId));
+      const agg = await getCountFromServer(q);
+      updateCountBadge(benchmarkId, agg.data().count);
+    } catch (err) {
+      console.warn('count refresh failed for', benchmarkId, err);
+    }
+  }
+
+  async function loadInitialCounts() {
+    const ids = Object.keys(countEls);
+    // Run in parallel; getCountFromServer is a single read each.
+    await Promise.allSettled(ids.map(refreshCountBadge));
+  }
+  // Kicked off after the projects/homework page renders (see INIT block).
 
   // ============== HOMEWORK page render ==============
   function renderHomework() {
@@ -1541,7 +2638,7 @@
     const sec = document.createElement('section');
     sec.className = 'project';
     sec.innerHTML = `
-      <h2 class="project-title">Weekly Homework</h2>
+      <h2 class="project-title">Weekly CAD Homework</h2>
       <div class="benchmarks" id="weekList"></div>
     `;
     const list = sec.querySelector('#weekList');
@@ -1552,12 +2649,156 @@
       row.innerHTML = `
         <div class="benchmark-label">${escapeHtml(w.title)}</div>
         <span class="artifact-count" data-count="${w.id}" style="display:none;">${PAPERCLIP_SVG}<span data-count-num>0</span></span>
+        <div class="points">5 pts</div>
       `;
       row.addEventListener('click', () => openHomeworkModal(w));
       list.appendChild(row);
       countEls[w.id] = row.querySelector(`[data-count="${w.id}"]`);
     });
     app.appendChild(sec);
+  }
+
+  // ============== PROGRESS page ==============
+  // Live grid of student × benchmark completion. Subscribes to the portfolios
+  // collection once; the existence of any portfolio doc with (studentName,
+  // benchmarkId) marks that cell as "done" and renders a clickable green check
+  // that opens the benchmark modal and auto-expands that student's row.
+  let _progressUnsubscribe = null;
+  let _progressData = {}; // { studentName: Set(benchmarkId) }
+
+  const PROG_CHECK_SVG = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>`;
+
+  function findBenchmarkById(id) {
+    for (const p of PROJECTS) {
+      for (const b of p.benchmarks) {
+        if (b.id === id) return b;
+      }
+    }
+    return null;
+  }
+
+  function shortBenchLabel(b, idx) {
+    if (b.id === 'instructable') return 'I';
+    return String(idx + 1);
+  }
+
+  function shortProjectLabel(p) {
+    // Keep the leading namespace ("Project 1", "Final"), drop the descriptive subtitle.
+    const m = p.title.match(/^([^:]+):/);
+    return m ? m[1].trim() : p.title;
+  }
+
+  function renderProgress() {
+    app.innerHTML = '';
+    const wrap = document.createElement('section');
+    wrap.className = 'progress-section';
+    wrap.innerHTML = `
+      <h2 class="project-title">Student Progress</h2>
+      <div id="progressTable" class="progress-board"></div>
+    `;
+    app.appendChild(wrap);
+    subscribeProgress();
+  }
+
+  function subscribeProgress() {
+    if (_progressUnsubscribe) _progressUnsubscribe();
+    _progressUnsubscribe = onSnapshot(collection(db, 'portfolios'), (snap) => {
+      _progressData = {};
+      snap.forEach(d => {
+        const data = d.data();
+        const name = (data.studentName || '').trim();
+        if (!name || !data.benchmarkId) return;
+        if (!_progressData[name]) _progressData[name] = new Set();
+        _progressData[name].add(data.benchmarkId);
+      });
+      renderProgressTable();
+    }, (err) => {
+      console.error('progress subscribe error', err);
+      const tbl = document.getElementById('progressTable');
+      if (tbl) tbl.innerHTML = `<tbody><tr><td class="prog-empty">Could not load progress.</td></tr></tbody>`;
+    });
+  }
+
+  function renderProgressTable() {
+    const tbl = document.getElementById('progressTable');
+    if (!tbl) return;
+
+    // Viewer's localStorage name — they always see their own card first, even
+    // if they haven't submitted anything yet. Lets every student walk up to
+    // Progress and see their full track ready to fill.
+    const myName = (localStorage.getItem(NAME_KEY) || '').trim();
+    const merged = { ..._progressData };
+
+    const allNames = new Set(Object.keys(merged));
+    if (myName) allNames.add(myName);
+
+    if (!allNames.size) {
+      tbl.innerHTML = `
+        <div class="prog-cards-empty">
+          <p class="prog-cards-empty-line">Track your progress through the course.</p>
+          <p class="prog-cards-empty-sub">Drop your first submission anywhere — your card will pin to the top of this page.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const studentNames = Array.from(allNames).sort((a, b) => {
+      if (myName) {
+        if (a.toLowerCase() === myName.toLowerCase()) return -1;
+        if (b.toLowerCase() === myName.toLowerCase()) return 1;
+      }
+      return a.localeCompare(b, undefined, { sensitivity: 'base' });
+    });
+
+    const totalBench = PROJECTS.reduce((s, p) => s + p.benchmarks.length, 0);
+
+    let html = '<div class="prog-cards">';
+    studentNames.forEach(name => {
+      const done = merged[name] || new Set();
+      let ownDone = 0;
+      PROJECTS.forEach(p => p.benchmarks.forEach(b => { if (done.has(b.id)) ownDone++; }));
+      const isMe = myName && name.toLowerCase() === myName.toLowerCase();
+
+      html += `<article class="prog-card${isMe ? ' is-you' : ''}">
+        <header class="prog-card-head">
+          <h3 class="prog-card-name">${escapeHtml(name)}${isMe ? '<span class="prog-card-you">you</span>' : ''}</h3>
+        </header>
+        <ul class="prog-card-rows">`;
+
+      PROJECTS.forEach(p => {
+        const prefix = shortProjectLabel(p);
+        const subtitle = p.title.replace(/^[^:]+:\s*/, '');
+        const rowFinalCls = p.id === 'final' ? ' is-final' : '';
+        html += `<li class="prog-card-row${rowFinalCls}">
+          <div class="prog-card-row-label">
+            <span class="prog-card-row-prefix">${escapeHtml(prefix)}</span>
+            <span class="prog-card-row-title">${escapeHtml(subtitle)}</span>
+          </div>
+          <div class="prog-card-row-dots">`;
+        p.benchmarks.forEach((b, idx) => {
+          const num = b.id === 'instructable' ? '' : (idx + 1);
+          if (done.has(b.id)) {
+            html += `<a class="prog-pip is-done" data-bench="${escapeHtml(b.id)}" data-student="${escapeHtml(name)}" title="View ${escapeHtml(name)}'s ${escapeHtml(b.title)}">${PROG_CHECK_SVG}</a>`;
+          } else {
+            html += `<span class="prog-pip" title="${escapeHtml(b.title)}">${num}</span>`;
+          }
+        });
+        html += `</div></li>`;
+      });
+
+      html += `</ul></article>`;
+    });
+    html += '</div>';
+
+    tbl.innerHTML = html;
+
+    tbl.querySelectorAll('.prog-pip.is-done[data-bench]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const benchObj = findBenchmarkById(a.dataset.bench);
+        if (benchObj) openModal(benchObj, { focusStudent: a.dataset.student });
+      });
+    });
   }
 
   function toggleChecked(id, row, cb) {
@@ -1575,6 +2816,21 @@
     persist();
   }
 
+  // Auto-check a benchmark after a successful submission. Idempotent —
+  // re-submitting won't toggle it back off.
+  function markChecked(id) {
+    if (checked.has(id)) return;
+    checked.add(id);
+    const cb = document.querySelector(`[data-checkbox="${id}"]`);
+    const row = cb ? cb.closest('.benchmark') : null;
+    if (cb) {
+      cb.classList.add('checked');
+      cb.setAttribute('aria-checked', 'true');
+    }
+    if (row) row.classList.add('done');
+    persist();
+  }
+
   // ============== MODAL ==============
   const modal = document.getElementById('modal');
   const modalCard = document.getElementById('modalCard');
@@ -1583,7 +2839,11 @@
   const modalBody = document.getElementById('modalBody');
   const closeBtn = document.getElementById('closeBtn');
 
-  function openModal(b) {
+  // _focusStudent: when set, the next portfolio gallery render auto-expands the
+  // row for that student name and scrolls it into view.
+  let _focusStudent = null;
+  function openModal(b, opts = {}) {
+    _focusStudent = opts.focusStudent || null;
     currentBenchmark = b;
     modalTitle.textContent = b.title;
     modalPoints.textContent = `${b.points} pts`;
@@ -1632,7 +2892,7 @@
         <div class="rubric">
           ${b.rubric.map(r => `
             <div class="rubric-row">
-              <div class="rubric-criterion">${escapeHtml(r.criterion)}</div>
+              <div class="rubric-criterion">${r.label ? `<strong>${escapeHtml(r.label)}:</strong> ` : ''}${escapeHtml(r.text || r.criterion || '')}</div>
               <div class="rubric-points">${r.points} pts</div>
             </div>
           `).join('')}
@@ -1641,15 +2901,35 @@
       modalBody.appendChild(sec);
     }
 
-    // Gallery (always present — students drop work here, signals to grade)
+    // Submission panel — instructable (link-only), Portfolio Drop (multi-slot), or checkpoint (photo + reflection)
+    const isPortfolioDrop = b.title === 'Portfolio Drop';
+    const isInstructable = b.id === 'instructable';
+    const portfolioSec = document.createElement('div');
+    portfolioSec.className = 'modal-section';
+    const submitHeading = isInstructable ? 'Drop your Instructable link'
+      : isPortfolioDrop ? 'Drop your portfolio'
+      : 'Submit evidence + reflection';
+    portfolioSec.innerHTML = `
+      <h3>${badge()}${submitHeading}</h3>
+      <div id="portfolioPanelMount"></div>
+    `;
+    modalBody.appendChild(portfolioSec);
+    const panelMount = portfolioSec.querySelector('#portfolioPanelMount');
+    panelMount.appendChild(
+      isInstructable ? buildInstructablePanel(b.id)
+      : isPortfolioDrop ? buildPortfolioPanel(b.id)
+      : buildCheckpointPanel(b.id)
+    );
+
+    // Gallery — students by name with expandable rows
     const gallerySec = document.createElement('div');
     gallerySec.className = 'modal-section';
     gallerySec.innerHTML = `
-      <h3>${badge()}Drop evidence of your work here</h3>
-      <div class="gallery-grid" id="galleryGrid"></div>
+      <h3>${isPortfolioDrop ? 'Class portfolios' : 'Class submissions'}</h3>
+      <div class="pf-gallery" id="pfGallery"></div>
     `;
     modalBody.appendChild(gallerySec);
-    subscribeGallery(b.id);
+    subscribePortfolios(b.id);
 
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1660,7 +2940,23 @@
     modal.classList.remove('open');
     document.body.style.overflow = '';
     currentBenchmark = null;
+    _focusStudent = null;
     if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
+    if (unsubscribePortfolios) { unsubscribePortfolios(); unsubscribePortfolios = null; }
+    // Cancel any pending debounced renders so they don't paint into a closed modal.
+    if (_galleryRenderTimer) { clearTimeout(_galleryRenderTimer); _galleryRenderTimer = null; _galleryRenderArgs = null; }
+    if (_pfGalleryRenderTimer) { clearTimeout(_pfGalleryRenderTimer); _pfGalleryRenderTimer = null; _pfGalleryRenderItems = null; }
+    // Clear modal body refs so a re-open animates fresh.
+    const pfGrid = document.getElementById('pfGallery');
+    if (pfGrid) pfGrid._pfKnownIds = null;
+    // Clear archive deep-link param so closing an archive doesn't keep it sticky.
+    try {
+      const sp = new URLSearchParams(location.search);
+      if (sp.has('archive')) {
+        sp.delete('archive');
+        history.replaceState(null, '', sp.toString() ? `${location.pathname}?${sp.toString()}` : location.pathname);
+      }
+    } catch (_) {}
   }
 
   function openHomeworkModal(w) {
@@ -1681,14 +2977,15 @@
       <div class="hw-col">
         <div class="step-section">
           <h3><span class="step-num">1</span>Step 1</h3>
-          <p>Watch this week's video.</p>
+          <p>Watch the video and follow along in Tinkercad.</p>
+          <a href="https://www.tinkercad.com/" target="_blank" rel="noopener" class="tinkercad-btn">Open Tinkercad <span class="arrow">↗</span></a>
           ${videoBlock}
         </div>
       </div>
       <div class="hw-col">
         <div class="step-section">
           <h3><span class="step-num">2</span>Step 2</h3>
-          <p>Use the skills from the video to create something purposeful. Describe its purpose and provide the public link to your work below.</p>
+          <p>Use the skills from the video to create something purposeful. Describe its purpose and provide the public link to your design below.</p>
           <div class="hw-step2-scroll">
             <div class="gallery-grid" id="galleryGrid"></div>
           </div>
@@ -1699,7 +2996,7 @@
 
     subscribeGallery(w.id, {
       linkOnly: true,
-      descriptionPlaceholder: 'Describe the purpose of your work…'
+      descriptionPlaceholder: 'Describe the purpose of your design…'
     });
 
     modal.classList.add('open');
@@ -1729,11 +3026,28 @@
       snap.forEach(d => items.push({ id: d.id, ...d.data() }));
       // newest first
       items.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-      renderGallery(grid, benchmarkId, items, opts);
+      // Update the count badge from the live snapshot for free (no extra read).
+      updateCountBadge(benchmarkId, items.length);
+      debouncedRenderGallery(grid, benchmarkId, items, opts);
     }, (err) => {
       console.error('gallery subscribe error', err);
       grid.innerHTML = `<div class="gallery-empty">Could not load gallery.</div>`;
     });
+  }
+
+  // Debounce gallery re-renders. When 30 students submit in 5 seconds the
+  // snapshot fires 30 times; we want to coalesce to ~1 paint per ~200ms.
+  let _galleryRenderTimer = null;
+  let _galleryRenderArgs = null;
+  function debouncedRenderGallery(...args) {
+    _galleryRenderArgs = args;
+    if (_galleryRenderTimer) return;
+    _galleryRenderTimer = setTimeout(() => {
+      _galleryRenderTimer = null;
+      const a = _galleryRenderArgs;
+      _galleryRenderArgs = null;
+      if (a) renderGallery.apply(null, a);
+    }, 200);
   }
 
   function renderGallery(grid, benchmarkId, items, opts = {}) {
@@ -1747,12 +3061,12 @@
       let media;
       if (isLink) {
         media = item.linkImage
-          ? `<img src="${item.linkImage}" alt="${escapeHtml(item.linkTitle || item.linkUrl)}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'link-fallback',innerHTML:'<div class=\\'link-icon\\'>🔗</div><div class=\\'link-domain\\'>${escapeHtml(item.linkDomain || '')}</div>'}));" />`
+          ? `<img src="${item.linkImage}" alt="${escapeHtml(item.linkTitle || item.linkUrl)}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'link-fallback',innerHTML:'<div class=\\'link-icon\\'>🔗</div><div class=\\'link-domain\\'>${escapeHtml(item.linkDomain || '')}</div>'}));" />`
           : `<div class="link-fallback"><div class="link-icon">🔗</div><div class="link-domain">${escapeHtml(item.linkDomain || 'link')}</div></div>`;
       } else if (isVideo) {
         media = `<video src="${item.fileUrl}" muted preload="metadata"></video><div class="play-icon">▶</div>`;
       } else {
-        media = `<img src="${item.fileUrl}" alt="${escapeHtml(item.studentName || '')}" loading="lazy" />`;
+        media = `<img src="${item.fileUrl}" alt="${escapeHtml(item.studentName || '')}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=&quot;pf-broken&quot;><span class=&quot;pf-broken-icon&quot;>⚠</span><span>(file unavailable)</span></div>';" />`;
       }
 
       tile.innerHTML = `
@@ -2110,9 +3424,1272 @@
         try { await deleteObject(storageRef(storage, item.filePath)); } catch (e) { /* file may already be gone */ }
       }
       await deleteDoc(doc(db, 'artifacts', item.id));
+      // Open-snapshot listener will update the count for this benchmark live;
+      // belt-and-braces refresh the badge in case nothing else closes the loop.
+      if (item.benchmarkId) refreshCountBadge(item.benchmarkId);
     } catch (err) {
       console.error('delete failed', err);
       alert('Could not delete. Try again.');
+    }
+  }
+
+  // ============== PORTFOLIO SYSTEM ==============
+  const SLOT_DEFS = [
+    { key: 'image',   label: 'Image',   icon: ICON_IMAGE,   accept: 'image/jpeg,image/png',                                          exts: 'JPG, PNG',  fileTypes: 'image', allowFile: true,  allowLink: false },
+    { key: 'video',   label: 'Video',   icon: ICON_VIDEO,   accept: 'video/mp4',                                                     exts: 'MP4',       fileTypes: 'video', allowFile: true,  allowLink: true  },
+    { key: 'cad',     label: 'CAD',     icon: ICON_CAD,     accept: '.stl,model/stl,application/sla,application/vnd.ms-pki.stl',    exts: 'STL',       fileTypes: 'cad',   allowFile: true,  allowLink: false },
+    { key: 'code',    label: 'Code',    icon: ICON_CODE,    accept: '',                                                              exts: 'Link only', fileTypes: 'link', allowFile: false, allowLink: true  },
+    { key: 'summary', label: 'Summary', icon: ICON_SUMMARY, accept: '',                                                              exts: 'Text only', fileTypes: 'text', allowFile: false, allowLink: false }
+  ];
+  const SUMMARY_MAX = 1500;
+  const PORTFOLIO_MAX_FILE = 100 * 1024 * 1024; // 100MB
+
+  function isStlFile(file) {
+    if (!file) return false;
+    if (/\.stl$/i.test(file.name || '')) return true;
+    const ct = (file.type || '').toLowerCase();
+    return ct === 'model/stl' || ct === 'application/sla' || ct === 'application/vnd.ms-pki.stl';
+  }
+
+  function isAcceptedForSlot(slotKey, file) {
+    if (!file) return false;
+    if (file.size > PORTFOLIO_MAX_FILE) return false;
+    const ct = (file.type || '').toLowerCase();
+    if (slotKey === 'image') {
+      return ct === 'image/jpeg' || ct === 'image/png';
+    }
+    if (slotKey === 'video') {
+      return ct === 'video/mp4';
+    }
+    if (slotKey === 'cad') {
+      return isStlFile(file);
+    }
+    return false; // code is link-only, summary is text-only
+  }
+
+  function shortBytes(n) {
+    if (n < 1024) return `${n} B`;
+    if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
+    return `${(n / 1024 / 1024).toFixed(1)} MB`;
+  }
+
+  function getDomain(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ''); }
+    catch (_) { return ''; }
+  }
+
+  function thumbnailFor(slotData) {
+    if (!slotData) return '';
+    if (slotData.mode === 'text') return ICON_SUMMARY;
+    if (slotData.mode === 'link') return ICON_LINK;
+    const ct = (slotData.contentType || '').toLowerCase();
+    if (ct.startsWith('image/')) return `<img src="${slotData.url}" alt="" loading="lazy" />`;
+    if (ct.startsWith('video/')) return `<video src="${slotData.url}" muted preload="metadata"></video>`;
+    return ICON_DOC;
+  }
+
+  function buildPortfolioPanel(benchmarkId) {
+    const panel = document.createElement('div');
+    panel.className = 'portfolio-panel';
+
+    const savedName = localStorage.getItem(NAME_KEY) || '';
+    panel.innerHTML = `
+      <div class="pf-name-row">
+        <label for="pfNameInput">Your name</label>
+        <input id="pfNameInput" type="text" maxlength="80" placeholder="e.g. Alex Rivera" value="${escapeHtml(savedName)}" />
+      </div>
+      <div class="pf-slots" data-pf-slots></div>
+      <div class="pf-actions">
+        <div class="pf-status" data-pf-status></div>
+        <button class="pf-submit" data-pf-submit type="button" disabled>Submit Portfolio</button>
+      </div>
+    `;
+
+    const nameInput = panel.querySelector('#pfNameInput');
+    const slotsEl = panel.querySelector('[data-pf-slots]');
+    const submitBtn = panel.querySelector('[data-pf-submit]');
+    const statusEl = panel.querySelector('[data-pf-status]');
+
+    // In-memory slot state: { image: {...}, video: {...}, ... } or null
+    const state = { image: null, video: null, code: null, cad: null, summary: null };
+    // Pending file objects, before submit (so we can upload at submit time)
+    const pendingFiles = {}; // { slotKey: File }
+    let openSlotKey = null;
+
+    SLOT_DEFS.forEach(def => {
+      const slot = document.createElement('div');
+      slot.className = 'pf-slot';
+      slot.dataset.slot = def.key;
+      slot.innerHTML = `
+        <div class="pf-slot-tile" data-pf-tile>
+          <div class="pf-slot-icon">${def.icon}</div>
+          <div class="pf-slot-label">${def.label}</div>
+          <div class="pf-slot-status">+ Add</div>
+          <div class="pf-slot-mini-actions">
+            <button type="button" data-pf-mini-edit aria-label="Edit">✎</button>
+            <button type="button" data-pf-mini-remove aria-label="Remove">×</button>
+          </div>
+        </div>
+        <div class="pf-slot-body">
+          <div class="pf-slot-head">
+            <div class="pf-slot-head-title">
+              <span class="pf-slot-icon">${def.icon}</span>
+              ${def.label}
+            </div>
+            <button type="button" class="pf-slot-collapse" data-pf-collapse aria-label="Collapse">×</button>
+          </div>
+          <div class="pf-slot-body-inner" data-pf-body-inner></div>
+        </div>
+      `;
+      slotsEl.appendChild(slot);
+
+      const tile = slot.querySelector('[data-pf-tile]');
+      const collapseBtn = slot.querySelector('[data-pf-collapse]');
+      const bodyInner = slot.querySelector('[data-pf-body-inner]');
+
+      tile.addEventListener('click', (e) => {
+        if (e.target.closest('[data-pf-mini-remove]')) {
+          e.stopPropagation();
+          clearSlot(def.key);
+          return;
+        }
+        if (e.target.closest('[data-pf-mini-edit]')) {
+          e.stopPropagation();
+        }
+        openSlot(def.key);
+      });
+      // Keyboard support: Enter / Space on tile opens slot
+      tile.setAttribute('tabindex', '0');
+      tile.setAttribute('role', 'button');
+      tile.setAttribute('aria-label', `${def.label} slot`);
+      tile.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('[data-pf-mini-remove], [data-pf-mini-edit]')) return;
+          e.preventDefault();
+          openSlot(def.key);
+        }
+      });
+      // Drag-over feedback on the slot tile itself (when collapsed) — only
+      // for slots that actually accept files.
+      if (def.allowFile) {
+        ['dragenter', 'dragover'].forEach(ev => slot.addEventListener(ev, (e) => {
+          if (slot.classList.contains('is-open')) return;
+          if (!e.dataTransfer || !e.dataTransfer.types.includes('Files')) return;
+          e.preventDefault();
+          slot.classList.add('is-tile-dragover');
+        }));
+        ['dragleave', 'drop'].forEach(ev => slot.addEventListener(ev, (e) => {
+          if (ev === 'dragleave' && slot.contains(e.relatedTarget)) return;
+          slot.classList.remove('is-tile-dragover');
+        }));
+        slot.addEventListener('drop', (e) => {
+          if (slot.classList.contains('is-open')) return;
+          const files = e.dataTransfer?.files;
+          if (!files || !files.length) return;
+          e.preventDefault();
+          openSlot(def.key);
+          handleFileForSlot(def, files[0]);
+        });
+      }
+      collapseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeOpenSlot();
+      });
+
+      function renderBody() {
+        if (def.fileTypes === 'text') {
+          const existingText = state.summary?.text || '';
+          bodyInner.innerHTML = `
+            <textarea class="pf-summary-box" data-pf-text rows="6" maxlength="${SUMMARY_MAX}" placeholder="4–5 sentences reflecting on your prototyping process: what you created, problems you encountered, how you overcame them, and new things you learned.">${escapeHtml(existingText)}</textarea>
+            <div class="pf-char-count" data-pf-char>${existingText.length} / ${SUMMARY_MAX}</div>
+          `;
+          const txt = bodyInner.querySelector('[data-pf-text]');
+          const counter = bodyInner.querySelector('[data-pf-char]');
+          const updateCount = () => {
+            const len = txt.value.length;
+            counter.textContent = `${len} / ${SUMMARY_MAX}`;
+            counter.classList.toggle('is-warn', len > SUMMARY_MAX * 0.85 && len <= SUMMARY_MAX);
+            counter.classList.toggle('is-over', len > SUMMARY_MAX);
+          };
+          txt.addEventListener('input', () => {
+            updateCount();
+            const v = txt.value.trim();
+            state.summary = v ? { mode: 'text', text: v.slice(0, SUMMARY_MAX) } : null;
+            refreshTile(def.key);
+            refreshSubmit();
+          });
+          updateCount();
+          setTimeout(() => txt.focus(), 50);
+          return;
+        }
+
+        // File slot UI
+        const filled = state[def.key];
+        let previewHtml = '';
+        if (filled) {
+          let thumb = '';
+          if (filled.mode === 'link') {
+            thumb = ICON_LINK;
+          } else if ((filled.contentType || '').startsWith('image/')) {
+            thumb = `<img src="${filled.url}" alt="" />`;
+          } else if ((filled.contentType || '').startsWith('video/')) {
+            thumb = `<video src="${filled.url}" muted></video>`;
+          } else {
+            thumb = ICON_DOC;
+          }
+          const title = filled.mode === 'link'
+            ? (filled.url || 'Link')
+            : (filled.fileName || 'File');
+          const meta = filled.mode === 'link'
+            ? (getDomain(filled.url) || 'External link')
+            : (filled.contentType || '');
+          previewHtml = `
+            <div class="pf-filled-preview">
+              <div class="pf-fp-thumb">${thumb}</div>
+              <div class="pf-fp-info">
+                <div class="pf-fp-title">${escapeHtml(title)}</div>
+                <div class="pf-fp-meta">${escapeHtml(meta)}</div>
+              </div>
+              <button type="button" class="pf-fp-remove" data-pf-clear aria-label="Remove">×</button>
+            </div>
+          `;
+        }
+
+        const dropHtml = def.allowFile ? `
+          <div class="pf-drop" data-pf-drop>
+            <div class="pf-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0l-5 5m5-5l5 5M4 20h16"/></svg></div>
+            <div class="pf-drop-text">Drop a file or click to upload</div>
+            <div class="pf-drop-sub">${def.exts} · up to 100MB</div>
+            <input type="file" data-pf-file accept="${def.accept}" style="display:none;" />
+          </div>
+        ` : '';
+        const linkHtml = def.allowLink ? `
+          <div class="pf-link-row">
+            <span class="pf-link-label">${def.allowFile ? 'Or link' : 'Public URL'}</span>
+            <span class="pf-link-input-wrap">
+              <input type="url" data-pf-link placeholder="https://…" value="${filled?.mode === 'link' ? escapeHtml(filled.url) : ''}" />
+              <span class="pf-link-check" data-pf-link-check></span>
+            </span>
+          </div>
+        ` : '';
+        bodyInner.innerHTML = `${previewHtml}${dropHtml}${linkHtml}`;
+
+        const dropZone = bodyInner.querySelector('[data-pf-drop]');
+        const fileInput = bodyInner.querySelector('[data-pf-file]');
+        const linkInput = bodyInner.querySelector('[data-pf-link]');
+        const linkCheck = bodyInner.querySelector('[data-pf-link-check]');
+        const clearBtn = bodyInner.querySelector('[data-pf-clear]');
+
+        if (clearBtn) clearBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          clearSlot(def.key);
+          renderBody();
+        });
+
+        if (dropZone && fileInput) {
+          dropZone.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', () => {
+            const f = fileInput.files[0];
+            if (f) handleFileForSlot(def, f);
+          });
+
+          ['dragenter', 'dragover'].forEach(ev => dropZone.addEventListener(ev, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('is-dragover');
+          }));
+          ['dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, (e) => {
+            if (ev === 'dragleave' && e.target !== dropZone) return;
+            dropZone.classList.remove('is-dragover');
+          }));
+          dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files && files.length) handleFileForSlot(def, files[0]);
+          });
+        }
+
+        if (!linkInput) return;
+        const commitLink = () => {
+          const v = linkInput.value.trim();
+          if (!v) return;
+          if (!/^https?:\/\//i.test(v)) {
+            setStatus('Link must start with http:// or https://', true);
+            return;
+          }
+          // Clear pending file, set link
+          delete pendingFiles[def.key];
+          state[def.key] = { mode: 'link', url: v };
+          refreshTile(def.key);
+          refreshSubmit();
+          setStatus('');
+          renderBody();
+        };
+        const updateLinkCheck = () => {
+          if (!linkCheck) return;
+          const v = linkInput.value.trim();
+          if (!v) {
+            linkCheck.classList.remove('is-valid', 'is-invalid');
+            linkCheck.textContent = '';
+            return;
+          }
+          if (/^https?:\/\/[^\s]+\.[^\s]+/i.test(v)) {
+            linkCheck.classList.add('is-valid');
+            linkCheck.classList.remove('is-invalid');
+            linkCheck.textContent = '✓';
+          } else {
+            linkCheck.classList.add('is-invalid');
+            linkCheck.classList.remove('is-valid');
+            linkCheck.textContent = '✗';
+          }
+        };
+        linkInput.addEventListener('input', updateLinkCheck);
+        updateLinkCheck();
+        linkInput.addEventListener('blur', commitLink);
+        linkInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            commitLink();
+          }
+        });
+      }
+
+      function handleFileForSlot(def, file) {
+        if (!isAcceptedForSlot(def.key, file)) {
+          setStatus(`That file type is not accepted for ${def.label}. Allowed: ${def.exts}.`, true);
+          return;
+        }
+        if (file.size > PORTFOLIO_MAX_FILE) {
+          setStatus('File too large (100MB max).', true);
+          return;
+        }
+        pendingFiles[def.key] = file;
+        // Use a local object URL for preview until upload at submit time
+        const objUrl = URL.createObjectURL(file);
+        const ct = file.type || (isStlFile(file) ? 'model/stl' : 'application/octet-stream');
+        state[def.key] = {
+          mode: 'file',
+          url: objUrl,
+          fileName: file.name,
+          contentType: ct,
+          _localPreview: true
+        };
+        refreshTile(def.key);
+        refreshSubmit();
+        setStatus('');
+        renderBody();
+        // Soft warning for files >50MB (still under the 100MB hard cap).
+        if (file.size > 50 * 1024 * 1024) {
+          const inner = bodyInner;
+          const existing = inner.querySelector('.pf-soft-warn');
+          if (existing) existing.remove();
+          const warn = document.createElement('div');
+          warn.className = 'pf-soft-warn';
+          warn.textContent = 'Files over 50MB are accepted but may slow down the class. Consider linking instead.';
+          inner.appendChild(warn);
+        }
+      }
+
+      function openSlot(key) {
+        // Already open? Do nothing — protect the in-progress textarea / link input.
+        if (openSlotKey === key && slot.classList.contains('is-open')) return;
+        if (openSlotKey && openSlotKey !== key) {
+          const prev = slotsEl.querySelector(`.pf-slot[data-slot="${openSlotKey}"]`);
+          if (prev) prev.classList.remove('is-open');
+        }
+        slot.classList.add('is-open');
+        openSlotKey = key;
+        renderBody();
+      }
+      function closeOpenSlot() {
+        slot.classList.remove('is-open');
+        if (openSlotKey === def.key) openSlotKey = null;
+      }
+
+      // Expose for outside helpers
+      slot._openSlot = openSlot;
+      slot._renderBody = renderBody;
+    });
+
+    function refreshTile(key) {
+      const slot = slotsEl.querySelector(`.pf-slot[data-slot="${key}"]`);
+      if (!slot) return;
+      const filled = state[key];
+      const tile = slot.querySelector('[data-pf-tile]');
+      const iconEl = tile.querySelector('.pf-slot-icon');
+      const labelEl = tile.querySelector('.pf-slot-label');
+      const statusEl = tile.querySelector('.pf-slot-status');
+      const def = SLOT_DEFS.find(d => d.key === key);
+
+      if (filled) {
+        slot.classList.add('is-filled');
+        if (filled.mode === 'text') {
+          const wordCount = filled.text.trim().split(/\s+/).filter(Boolean).length;
+          statusEl.textContent = wordCount === 1 ? '1 word written' : `${wordCount} words written`;
+          iconEl.textContent = def.icon;
+        } else if (filled.mode === 'link') {
+          statusEl.textContent = `Link · ${getDomain(filled.url) || 'external'}`;
+          iconEl.textContent = def.icon;
+        } else {
+          // File: show filename truncated, swap icon for a tiny thumb if image/video
+          statusEl.textContent = filled.fileName || 'File';
+          if ((filled.contentType || '').startsWith('image/')) {
+            iconEl.innerHTML = `<div class="pf-slot-thumb"><img src="${filled.url}" alt="" /></div>`;
+          } else if ((filled.contentType || '').startsWith('video/')) {
+            iconEl.innerHTML = `<div class="pf-slot-thumb"><video src="${filled.url}" muted></video></div>`;
+          } else {
+            iconEl.textContent = def.icon;
+          }
+        }
+        labelEl.textContent = def.label;
+      } else {
+        slot.classList.remove('is-filled');
+        iconEl.textContent = def.icon;
+        statusEl.textContent = '+ Add';
+        labelEl.textContent = def.label;
+      }
+    }
+
+    function clearSlot(key) {
+      const filled = state[key];
+      if (filled?._localPreview && filled.url) {
+        try { URL.revokeObjectURL(filled.url); } catch (_) {}
+      }
+      delete pendingFiles[key];
+      state[key] = null;
+      refreshTile(key);
+      refreshSubmit();
+    }
+
+    function refreshSubmit() {
+      const name = nameInput.value.trim();
+      const anyFilled = Object.values(state).some(v => v !== null);
+      submitBtn.disabled = !(name && anyFilled);
+    }
+    nameInput.addEventListener('input', refreshSubmit);
+
+    let statusTimeout = null;
+    function setStatus(msg, isErr) {
+      if (statusTimeout) { clearTimeout(statusTimeout); statusTimeout = null; }
+      statusEl.textContent = msg;
+      statusEl.classList.toggle('is-error', !!isErr);
+      // Auto-clear errors after 4s so they don't linger on the panel.
+      if (isErr && msg) {
+        statusTimeout = setTimeout(() => {
+          statusEl.textContent = '';
+          statusEl.classList.remove('is-error');
+        }, 4000);
+      }
+    }
+
+    let _isSubmitting = false;
+    async function doSubmit() {
+      if (_isSubmitting) return; // hard double-submit guard
+      const name = nameInput.value.trim();
+      if (!name) { setStatus('Please enter your name.', true); return; }
+      const anyFilled = Object.values(state).some(v => v !== null);
+      if (!anyFilled) { setStatus('Add at least one slot before submitting.', true); return; }
+      _isSubmitting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      setStatus('Submitting…');
+      localStorage.setItem(NAME_KEY, name);
+
+      // Track per-slot upload outcome so a single failure doesn't wipe the
+      // student's other filled slots. Failed slots stay in state with a
+      // _retryable flag so they can be re-tried.
+      const failedSlots = [];
+
+      try {
+        const finalSlots = { image: null, video: null, code: null, cad: null, summary: null };
+        const uploadedPaths = []; // track for rollback if doc-write fails
+
+        for (const def of SLOT_DEFS) {
+          const cur = state[def.key];
+          if (!cur) continue;
+          if (cur.mode === 'text') {
+            finalSlots[def.key] = { mode: 'text', text: cur.text };
+            continue;
+          }
+          if (cur.mode === 'link') {
+            finalSlots[def.key] = { mode: 'link', url: cur.url };
+            continue;
+          }
+          // File: upload
+          const file = pendingFiles[def.key];
+          if (!file) {
+            // Already uploaded? (shouldn't happen in this flow, but guard)
+            finalSlots[def.key] = {
+              mode: 'file', url: cur.url, fileName: cur.fileName, contentType: cur.contentType
+            };
+            continue;
+          }
+          setStatus(`Uploading ${def.label}…`);
+          try {
+            const ext = (file.name.match(/\.[a-z0-9]+$/i) || [''])[0];
+            const path = `portfolios/${benchmarkId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${def.key}${ext}`;
+            const ref = storageRef(storage, path);
+            const ct = file.type || (isStlFile(file) ? 'model/stl' : 'application/octet-stream');
+            const task = uploadBytesResumable(ref, file, { contentType: ct });
+            await new Promise((resolve, reject) => {
+              task.on('state_changed',
+                (snap) => {
+                  const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+                  setStatus(`Uploading ${def.label}… ${pct}%`);
+                },
+                reject,
+                resolve
+              );
+            });
+            const url = await getDownloadURL(task.snapshot.ref);
+            uploadedPaths.push(path);
+            finalSlots[def.key] = {
+              mode: 'file',
+              url,
+              fileName: file.name,
+              contentType: ct,
+              filePath: path
+            };
+          } catch (perSlotErr) {
+            console.error(`upload failed for ${def.key}`, perSlotErr);
+            failedSlots.push(def);
+            // Leave state[def.key] intact so the student can retry without
+            // re-attaching the file.
+          }
+        }
+
+        const anySucceeded = Object.values(finalSlots).some(v => v !== null);
+        if (failedSlots.length && !anySucceeded) {
+          // Total failure — surface a retry prompt and bail without writing.
+          throw new Error(
+            `Upload failed for ${failedSlots.map(d => d.label).join(', ')}. Check your wifi and try again.`
+          );
+        }
+
+        await addDoc(collection(db, 'portfolios'), {
+          benchmarkId,
+          studentName: name,
+          createdAt: serverTimestamp(),
+          slots: finalSlots
+        });
+
+        // Reset state ONLY for slots that successfully uploaded. Keep failed
+        // slots in state so the student can retry them.
+        for (const def of SLOT_DEFS) {
+          if (failedSlots.find(f => f.key === def.key)) continue; // preserve
+          const cur = state[def.key];
+          if (cur?._localPreview && cur.url) {
+            try { URL.revokeObjectURL(cur.url); } catch (_) {}
+          }
+          state[def.key] = null;
+          delete pendingFiles[def.key];
+          refreshTile(def.key);
+        }
+        if (openSlotKey && !failedSlots.find(f => f.key === openSlotKey)) {
+          const prev = slotsEl.querySelector(`.pf-slot[data-slot="${openSlotKey}"]`);
+          if (prev) prev.classList.remove('is-open');
+          openSlotKey = null;
+        }
+
+        // Refresh the count badge for this benchmark in case the snapshot
+        // hasn't propagated yet (it usually has, but this is belt-and-braces).
+        refreshCountBadge(benchmarkId);
+        if (!failedSlots.length) markChecked(benchmarkId);
+
+        // Success pulse: green flash on the button, status briefly, then clear.
+        submitBtn.textContent = failedSlots.length ? 'Submit failed slots' : '✓ Submitted!';
+        if (!failedSlots.length) submitBtn.classList.add('is-success');
+        if (failedSlots.length) {
+          setStatus(`Saved ${SLOT_DEFS.length - failedSlots.length} slot(s). ${failedSlots.map(d => d.label).join(', ')} failed — retry?`, true);
+        } else {
+          setStatus('Your portfolio is in the gallery below.');
+        }
+        setTimeout(() => {
+          submitBtn.classList.remove('is-success');
+          submitBtn.textContent = 'Submit Portfolio';
+          if (!failedSlots.length) setStatus('');
+          _isSubmitting = false;
+          refreshSubmit();
+        }, 1800);
+      } catch (err) {
+        console.error('portfolio submit failed', err);
+        submitBtn.textContent = 'Submit Portfolio';
+        const msg = err?.code === 'unavailable' || /network|offline/i.test(err?.message || '')
+          ? 'Connection failed. Check wifi and retry.'
+          : (err.message || 'Submit failed. Try again.');
+        setStatus(msg, true);
+        submitBtn.disabled = false;
+        _isSubmitting = false;
+      }
+    }
+    submitBtn.addEventListener('click', doSubmit);
+    // Prevent stray Enter-key resubmits from inside the panel.
+    panel.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      if (e.target.tagName === 'TEXTAREA') return; // newline allowed in summary
+      if (e.target === submitBtn) {
+        e.preventDefault();
+        doSubmit();
+      }
+    });
+
+    refreshSubmit();
+    return panel;
+  }
+
+  // ----- Checkpoint panel (benchmarks 1-4): photo + 3-sentence reflection -----
+  // Writes to the same `portfolios` collection as the full Portfolio Drop, with
+  // only the `image` and `summary` slots filled — so the existing gallery
+  // renders checkpoint submissions with no extra code path.
+  function buildCheckpointPanel(benchmarkId) {
+    const panel = document.createElement('div');
+    panel.className = 'portfolio-panel checkpoint-panel';
+
+    const savedName = localStorage.getItem(NAME_KEY) || '';
+    panel.innerHTML = `
+      <div class="pf-name-row">
+        <label for="cpNameInput">Your name</label>
+        <input id="cpNameInput" type="text" maxlength="80" placeholder="e.g. Alex Rivera" value="${escapeHtml(savedName)}" />
+      </div>
+      <div class="cp-section">
+        <div class="cp-section-label">Photo of your work</div>
+        <div class="pf-drop" data-cp-drop>
+          <div class="pf-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0l-5 5m5-5l5 5M4 20h16"/></svg></div>
+          <div class="pf-drop-text">Drop a photo or click to upload</div>
+          <div class="pf-drop-sub">JPG, PNG · up to 100MB</div>
+          <input type="file" data-cp-file accept="image/jpeg,image/png" style="display:none;" />
+        </div>
+        <div class="cp-preview" data-cp-preview hidden></div>
+      </div>
+      <div class="cp-section">
+        <div class="cp-section-label">Reflection</div>
+        <textarea class="cp-reflection" data-cp-text rows="6" maxlength="1500"
+          placeholder="1. Summarize what you made.&#10;2. Describe any problems you ran into and how you worked through them.&#10;3. List at least three new things you learned."></textarea>
+      </div>
+      <div class="pf-actions">
+        <div class="pf-status" data-cp-status></div>
+        <button class="pf-submit" data-cp-submit type="button" disabled>Submit</button>
+      </div>
+    `;
+
+    const nameInput = panel.querySelector('#cpNameInput');
+    const drop = panel.querySelector('[data-cp-drop]');
+    const fileInput = panel.querySelector('[data-cp-file]');
+    const preview = panel.querySelector('[data-cp-preview]');
+    const textarea = panel.querySelector('[data-cp-text]');
+    const submitBtn = panel.querySelector('[data-cp-submit]');
+    const statusEl = panel.querySelector('[data-cp-status]');
+
+    let pendingFile = null;
+    let previewUrl = null;
+
+    function setStatus(msg, isError) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('is-error', !!isError);
+    }
+    function refreshSubmit() {
+      const ok = !!(nameInput.value.trim() && pendingFile && textarea.value.trim());
+      submitBtn.disabled = !ok;
+    }
+    function clearPhoto() {
+      pendingFile = null;
+      if (previewUrl) { try { URL.revokeObjectURL(previewUrl); } catch (_) {} }
+      previewUrl = null;
+      preview.innerHTML = '';
+      preview.hidden = true;
+      drop.style.display = '';
+      fileInput.value = '';
+      refreshSubmit();
+    }
+    function showPreview(file) {
+      if (previewUrl) { try { URL.revokeObjectURL(previewUrl); } catch (_) {} }
+      previewUrl = URL.createObjectURL(file);
+      preview.innerHTML = `
+        <img src="${previewUrl}" alt="" />
+        <div class="cp-preview-meta">
+          <div class="cp-preview-name">${escapeHtml(file.name)}</div>
+          <button type="button" class="cp-preview-remove" data-cp-remove aria-label="Remove">×</button>
+        </div>
+      `;
+      preview.hidden = false;
+      drop.style.display = 'none';
+      preview.querySelector('[data-cp-remove]').addEventListener('click', clearPhoto);
+    }
+    function handleFile(file) {
+      if (!file) return;
+      const ct = (file.type || '').toLowerCase();
+      if (ct !== 'image/jpeg' && ct !== 'image/png') {
+        setStatus('Photo must be JPG or PNG.', true);
+        return;
+      }
+      if (file.size > PORTFOLIO_MAX_FILE) {
+        setStatus('File too large (100MB max).', true);
+        return;
+      }
+      setStatus('');
+      pendingFile = file;
+      showPreview(file);
+      refreshSubmit();
+    }
+
+    drop.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => handleFile(fileInput.files?.[0]));
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, (e) => {
+      if (!e.dataTransfer || !e.dataTransfer.types.includes('Files')) return;
+      e.preventDefault();
+      drop.classList.add('is-dragover');
+    }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, () => {
+      drop.classList.remove('is-dragover');
+    }));
+    drop.addEventListener('drop', (e) => {
+      const files = e.dataTransfer?.files;
+      if (!files || !files.length) return;
+      e.preventDefault();
+      handleFile(files[0]);
+    });
+
+    nameInput.addEventListener('input', refreshSubmit);
+    textarea.addEventListener('input', refreshSubmit);
+
+    let isSubmitting = false;
+    submitBtn.addEventListener('click', async () => {
+      if (isSubmitting) return;
+      const name = nameInput.value.trim();
+      const text = textarea.value.trim();
+      if (!name || !pendingFile || !text) return;
+      isSubmitting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      setStatus('Uploading…');
+      localStorage.setItem(NAME_KEY, name);
+
+      try {
+        const ext = (pendingFile.name.match(/\.[a-z0-9]+$/i) || [''])[0];
+        const path = `portfolios/${benchmarkId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-image${ext}`;
+        const ref = storageRef(storage, path);
+        const ct = pendingFile.type || 'image/jpeg';
+        const task = uploadBytesResumable(ref, pendingFile, { contentType: ct });
+        await new Promise((resolve, reject) => {
+          task.on('state_changed',
+            (snap) => {
+              const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+              setStatus(`Uploading… ${pct}%`);
+            },
+            reject,
+            resolve
+          );
+        });
+        const url = await getDownloadURL(task.snapshot.ref);
+
+        await addDoc(collection(db, 'portfolios'), {
+          benchmarkId,
+          studentName: name,
+          createdAt: serverTimestamp(),
+          slots: {
+            image: { mode: 'file', url, fileName: pendingFile.name, contentType: ct, filePath: path },
+            video: null,
+            code: null,
+            cad: null,
+            summary: { mode: 'text', text: text.slice(0, 1500) }
+          }
+        });
+
+        clearPhoto();
+        textarea.value = '';
+        refreshCountBadge(benchmarkId);
+        markChecked(benchmarkId);
+
+        submitBtn.textContent = '✓ Submitted!';
+        submitBtn.classList.add('is-success');
+        setStatus('Your submission is in the gallery below.');
+        setTimeout(() => {
+          submitBtn.classList.remove('is-success');
+          submitBtn.textContent = 'Submit';
+          setStatus('');
+          isSubmitting = false;
+          refreshSubmit();
+        }, 1800);
+      } catch (err) {
+        console.error('checkpoint submit failed', err);
+        setStatus('Submit failed. Check your wifi and try again.', true);
+        submitBtn.textContent = 'Submit';
+        isSubmitting = false;
+        refreshSubmit();
+      }
+    });
+
+    return panel;
+  }
+
+  // ----- Instructable panel — link-only submission -----
+  // Stores the URL under slot.code so the existing gallery renders it as a
+  // clickable link chip without any extra render path.
+  function buildInstructablePanel(benchmarkId) {
+    const panel = document.createElement('div');
+    panel.className = 'portfolio-panel checkpoint-panel instructable-panel';
+
+    const savedName = localStorage.getItem(NAME_KEY) || '';
+    panel.innerHTML = `
+      <div class="pf-name-row">
+        <label for="instNameInput">Your name</label>
+        <input id="instNameInput" type="text" maxlength="80" placeholder="e.g. Alex Rivera" value="${escapeHtml(savedName)}" />
+      </div>
+      <div class="cp-section">
+        <div class="cp-section-label">Public Instructable URL</div>
+        <input class="inst-link-input" type="url" data-inst-link placeholder="https://www.instructables.com/..." />
+      </div>
+      <div class="pf-actions">
+        <div class="pf-status" data-inst-status></div>
+        <button class="pf-submit" data-inst-submit type="button" disabled>Submit</button>
+      </div>
+    `;
+
+    const nameInput = panel.querySelector('#instNameInput');
+    const linkInput = panel.querySelector('[data-inst-link]');
+    const submitBtn = panel.querySelector('[data-inst-submit]');
+    const statusEl = panel.querySelector('[data-inst-status]');
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('is-error', !!isErr);
+    }
+    function refresh() {
+      const ok = nameInput.value.trim() && /^https?:\/\/\S+/i.test(linkInput.value.trim());
+      submitBtn.disabled = !ok;
+    }
+    nameInput.addEventListener('input', refresh);
+    linkInput.addEventListener('input', refresh);
+
+    let isSubmitting = false;
+    submitBtn.addEventListener('click', async () => {
+      if (isSubmitting) return;
+      const name = nameInput.value.trim();
+      const url = linkInput.value.trim();
+      if (!name) { setStatus('Please enter your name.', true); return; }
+      if (!/^https?:\/\//i.test(url)) { setStatus('Link must start with http:// or https://', true); return; }
+
+      isSubmitting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      setStatus('');
+      localStorage.setItem(NAME_KEY, name);
+
+      try {
+        await addDoc(collection(db, 'portfolios'), {
+          benchmarkId,
+          studentName: name,
+          createdAt: serverTimestamp(),
+          slots: {
+            image: null, video: null, code: { mode: 'link', url }, cad: null, summary: null
+          }
+        });
+        linkInput.value = '';
+        refreshCountBadge(benchmarkId);
+        markChecked(benchmarkId);
+
+        submitBtn.textContent = '✓ Submitted!';
+        submitBtn.classList.add('is-success');
+        setStatus('Your Instructable is in the gallery below.');
+        setTimeout(() => {
+          submitBtn.classList.remove('is-success');
+          submitBtn.textContent = 'Submit';
+          setStatus('');
+          isSubmitting = false;
+          refresh();
+        }, 1800);
+      } catch (err) {
+        console.error('instructable submit failed', err);
+        setStatus('Submit failed. Check your wifi and try again.', true);
+        submitBtn.textContent = 'Submit';
+        isSubmitting = false;
+        refresh();
+      }
+    });
+
+    refresh();
+    return panel;
+  }
+
+  // ----- Portfolio gallery (live) -----
+  // Note: only the focused benchmark has a live listener. With 200 students
+  // each submitting ~5 portfolios per benchmark this listener pulls ~1000
+  // docs once on first open, then deltas only. We paginate the rendered
+  // gallery to 50 rows at a time so the DOM stays responsive.
+  let _pfGalleryPage = 50; // number of rows currently shown
+  const PF_PAGE_SIZE = 50;
+  let _pfGalleryRenderTimer = null;
+  let _pfGalleryRenderItems = null;
+  function debouncedRenderPortfolio(grid, items) {
+    _pfGalleryRenderItems = items;
+    if (_pfGalleryRenderTimer) return;
+    _pfGalleryRenderTimer = setTimeout(() => {
+      _pfGalleryRenderTimer = null;
+      const it = _pfGalleryRenderItems;
+      _pfGalleryRenderItems = null;
+      if (it) renderPortfolioGallery(grid, it);
+    }, 200);
+  }
+  function subscribePortfolios(benchmarkId) {
+    if (unsubscribePortfolios) unsubscribePortfolios();
+    _pfGalleryPage = PF_PAGE_SIZE; // reset paginator on every benchmark open
+    const grid = document.getElementById('pfGallery');
+    if (!grid) return;
+    const q = query(collection(db, 'portfolios'), where('benchmarkId', '==', benchmarkId));
+    unsubscribePortfolios = onSnapshot(q, (snap) => {
+      const items = [];
+      snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+      // alphabetical by name
+      items.sort((a, b) => (a.studentName || '').localeCompare(b.studentName || '', undefined, { sensitivity: 'base' }));
+      // Update the count badge live from the snapshot — no extra read.
+      updateCountBadge(benchmarkId, items.length);
+      debouncedRenderPortfolio(grid, items);
+    }, (err) => {
+      console.error('portfolio subscribe error', err);
+      grid.innerHTML = `<div class="pf-gallery-empty">Could not load portfolios.</div>`;
+    });
+  }
+
+  function renderPortfolioGallery(grid, items, opts = {}) {
+    const readOnly = !!opts.readOnly;
+    // Track which IDs were already painted so we only animate genuinely-new rows.
+    const knownIds = grid._pfKnownIds || new Set();
+    // Preserve which row was open before re-render
+    const openIds = new Set();
+    grid.querySelectorAll('.pf-row.is-open').forEach(r => openIds.add(r.dataset.id));
+
+    grid.innerHTML = '';
+    if (!items.length) {
+      grid.innerHTML = readOnly
+        ? `<div class="pf-gallery-empty">No portfolios in this archive.</div>`
+        : `<div class="pf-gallery-empty">No portfolios yet — be the first to drop yours.</div>`;
+      grid._pfKnownIds = new Set();
+      return;
+    }
+
+    // Pagination: only paint up to _pfGalleryPage rows.
+    const total = items.length;
+    const pageSize = readOnly ? total : _pfGalleryPage;
+    const visible = items.slice(0, pageSize);
+
+    const newKnownIds = new Set();
+    visible.forEach(item => {
+      newKnownIds.add(item.id);
+      const row = document.createElement('div');
+      row.className = 'pf-row';
+      row.dataset.id = item.id;
+      // Suppress entry animation for rows we've already shown — only NEW submissions slide in.
+      if (knownIds.has(item.id)) row.style.animation = 'none';
+      const slots = item.slots || {};
+      const filledKeys = SLOT_DEFS.filter(d => slots[d.key]).map(d => d.key);
+      const chips = filledKeys.map(k => {
+        const def = SLOT_DEFS.find(d => d.key === k);
+        return `<span class="pf-row-chip" title="${escapeHtml(def.label)}" aria-label="${escapeHtml(def.label)} attached"><span class="pf-chip-icon">${def.icon}</span></span>`;
+      }).join('');
+
+      const deleteBtnHtml = readOnly
+        ? ''
+        : `<button class="pf-row-delete" data-pf-row-delete aria-label="Delete portfolio">×</button>`;
+      row.innerHTML = `
+        <div class="pf-row-head" data-pf-row-head>
+          <span class="pf-row-name">${escapeHtml(item.studentName || 'Unnamed')}</span>
+          <span class="pf-row-icons">${chips || '<span class="pf-row-chip is-empty">empty</span>'}</span>
+          ${deleteBtnHtml}
+          <span class="pf-row-caret">▶</span>
+        </div>
+        <div class="pf-row-body"><div class="pf-row-body-inner" data-pf-row-body></div></div>
+      `;
+      grid.appendChild(row);
+
+      const head = row.querySelector('[data-pf-row-head]');
+      const body = row.querySelector('[data-pf-row-body]');
+      const deleteBtn = row.querySelector('[data-pf-row-delete]');
+
+      head.addEventListener('click', (e) => {
+        if (e.target.closest('[data-pf-row-delete]')) return;
+        const willOpen = !row.classList.contains('is-open');
+        row.classList.toggle('is-open', willOpen);
+        if (willOpen) {
+          renderRowBody(body, item, { readOnly });
+          // Dynamic max-height: open to actual content, then settle to auto.
+          const inner = row.querySelector('.pf-row-body');
+          if (inner) {
+            inner.style.maxHeight = inner.scrollHeight + 'px';
+            const onEnd = () => {
+              if (row.classList.contains('is-open')) inner.style.maxHeight = 'none';
+              inner.removeEventListener('transitionend', onEnd);
+            };
+            inner.addEventListener('transitionend', onEnd);
+          }
+        } else {
+          // Collapsing: snap back to a measured height first, then 0, so the
+          // CSS transition runs even if we were on max-height: none.
+          const inner = row.querySelector('.pf-row-body');
+          if (inner) {
+            inner.style.maxHeight = inner.scrollHeight + 'px';
+            requestAnimationFrame(() => { inner.style.maxHeight = '0px'; });
+          }
+        }
+      });
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          if (!confirm(`Delete ${item.studentName}'s portfolio?`)) return;
+          await deletePortfolio(item);
+        });
+      }
+
+      if (openIds.has(item.id)) {
+        row.classList.add('is-open');
+        renderRowBody(body, item, { readOnly });
+      }
+    });
+
+    // "Show next 50" pager
+    if (!readOnly && total > pageSize) {
+      const remaining = total - pageSize;
+      const nextChunk = Math.min(PF_PAGE_SIZE, remaining);
+      const pager = document.createElement('div');
+      pager.className = 'pf-pager';
+      pager.innerHTML = `<button type="button">Show next ${nextChunk} (${remaining} more)</button>`;
+      pager.querySelector('button').addEventListener('click', () => {
+        _pfGalleryPage += PF_PAGE_SIZE;
+        renderPortfolioGallery(grid, items, opts);
+      });
+      grid.appendChild(pager);
+    }
+
+    grid._pfKnownIds = newKnownIds;
+
+    // Deep-link from Progress page: auto-expand the targeted student's row
+    // and scroll the gallery into view. Consumes _focusStudent on success.
+    if (!readOnly && _focusStudent) {
+      const target = _focusStudent;
+      requestAnimationFrame(() => {
+        const rows = grid.querySelectorAll('.pf-row');
+        for (const r of rows) {
+          const nameEl = r.querySelector('.pf-row-name');
+          const name = (nameEl?.textContent || '').trim();
+          if (name.localeCompare(target, undefined, { sensitivity: 'base' }) === 0) {
+            if (!r.classList.contains('is-open')) {
+              r.querySelector('[data-pf-row-head]')?.click();
+            }
+            setTimeout(() => r.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+            _focusStudent = null;
+            break;
+          }
+        }
+      });
+    }
+  }
+
+  function renderRowBody(body, item, opts = {}) {
+    const readOnly = !!opts.readOnly;
+    body.innerHTML = '';
+    const slots = item.slots || {};
+    SLOT_DEFS.forEach(def => {
+      const data = slots[def.key];
+      if (!data) return;
+      const tile = document.createElement('div');
+      tile.className = 'pf-view-tile';
+      tile.dataset.slotKey = def.key;
+      body.appendChild(tile);
+      paintTile(tile, def, data, item, false, { readOnly });
+    });
+    if (!body.children.length) {
+      body.innerHTML = `<div class="pf-gallery-empty" style="grid-column:1/-1;">No slots filled.</div>`;
+    }
+  }
+
+  // Paint a single tile (DOM events + content) — single source of truth so we don't double-bind.
+  function paintTile(tile, def, data, item, isExpanded, opts = {}) {
+    const readOnly = !!opts.readOnly;
+    tile.classList.toggle('is-expanded', isExpanded);
+    tile.innerHTML = renderSlotView(def, data, isExpanded, { readOnly });
+
+    const onTileClick = (e) => {
+      if (e.target.closest('a, .pf-view-readmore, .pf-view-slot-delete, [data-pf-lightbox]')) return;
+      // For text slots, don't toggle — Read more / less handles that
+      if (data.mode === 'text' && tile.querySelector('.pf-view-readmore')) return;
+      paintTile(tile, def, data, item, !isExpanded, { readOnly });
+    };
+    tile.onclick = onTileClick;
+
+    const readMore = tile.querySelector('.pf-view-readmore');
+    if (readMore && !readMore.hasAttribute('style')) {
+      // Only wire interactive Read more (the "Click to expand" hint has pointer-events:none)
+      readMore.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const summary = tile.querySelector('.pf-view-summary');
+        if (summary) {
+          summary.classList.toggle('is-collapsed');
+          readMore.textContent = summary.classList.contains('is-collapsed') ? 'Read more' : 'Read less';
+        }
+      });
+    }
+    const slotDelete = tile.querySelector('.pf-view-slot-delete');
+    if (slotDelete && !readOnly) {
+      slotDelete.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Delete ${item.studentName}'s ${def.label} slot?`)) return;
+        await deletePortfolioSlot(item, def.key);
+      });
+    }
+    const lightboxTrigger = tile.querySelector('[data-pf-lightbox]');
+    if (lightboxTrigger) {
+      lightboxTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPortfolioLightbox(data, item.studentName, def.label);
+      });
+    }
+    // Image graceful failure: if the URL 404s show a friendly placeholder.
+    tile.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', () => {
+        const wrap = img.closest('.pf-view-thumb');
+        if (wrap) {
+          wrap.innerHTML = `<div class="pf-broken"><span class="pf-broken-icon">⚠</span><span>(file unavailable)</span></div>`;
+        }
+      }, { once: true });
+    });
+    tile.querySelectorAll('iframe').forEach(f => {
+      f.addEventListener('error', () => {
+        const wrap = f.closest('.pf-view-thumb');
+        if (wrap) wrap.innerHTML = `<div class="pf-broken"><span class="pf-broken-icon">⚠</span><span>(file unavailable)</span></div>`;
+      }, { once: true });
+    });
+  }
+
+  function renderSlotView(def, data, isExpanded, opts = {}) {
+    const readOnly = !!opts.readOnly;
+    const slotDeleteBtn = readOnly
+      ? ''
+      : `<button class="pf-view-slot-delete" data-pf-slot-delete aria-label="Delete slot">×</button>`;
+    const headHtml = `
+      <div class="pf-view-head">
+        <span class="pf-view-icon">${def.icon}</span>
+        <span class="pf-view-label">${escapeHtml(def.label)}</span>
+      </div>
+      ${slotDeleteBtn}
+    `;
+
+    if (data.mode === 'text') {
+      const text = data.text || '';
+      const long = text.length > 200;
+      return `
+        ${headHtml}
+        <div class="pf-view-summary${(!isExpanded && long) ? ' is-collapsed' : ''}">${escapeHtml(text)}</div>
+        ${long ? `<button class="pf-view-readmore" type="button">${(!isExpanded) ? 'Read more' : 'Read less'}</button>` : ''}
+      `;
+    }
+
+    if (data.mode === 'link') {
+      const domain = getDomain(data.url) || 'link';
+      return `
+        ${headHtml}
+        <div class="pf-view-thumb" style="font-size:32px;">🔗</div>
+        <div class="pf-view-filename">${escapeHtml(domain)}</div>
+        <a class="pf-view-open" href="${data.url}" target="_blank" rel="noopener">Open ↗</a>
+      `;
+    }
+
+    // File
+    const ct = (data.contentType || '').toLowerCase();
+    if (ct.startsWith('image/')) {
+      return `
+        ${headHtml}
+        <div class="pf-view-thumb" data-pf-lightbox><img src="${data.url}" alt="${escapeHtml(data.fileName || '')}" loading="lazy" decoding="async" /></div>
+        <div class="pf-view-filename">${escapeHtml(data.fileName || 'Image')}</div>
+        ${isExpanded ? '' : '<span class="pf-view-readmore" style="pointer-events:none;">Click to expand</span>'}
+      `;
+    }
+    if (ct.startsWith('video/')) {
+      if (isExpanded) {
+        return `
+          ${headHtml}
+          <div class="pf-view-thumb"><video src="${data.url}" controls preload="metadata"></video></div>
+          <div class="pf-view-filename">${escapeHtml(data.fileName || 'Video')}</div>
+          <a class="pf-view-open" href="${data.url}" target="_blank" rel="noopener">Open ↗</a>
+        `;
+      }
+      return `
+        ${headHtml}
+        <div class="pf-view-thumb"><video src="${data.url}" muted preload="metadata"></video><div class="play-badge">▶</div></div>
+        <div class="pf-view-filename">${escapeHtml(data.fileName || 'Video')}</div>
+      `;
+    }
+    if (ct === 'application/pdf') {
+      if (isExpanded) {
+        return `
+          ${headHtml}
+          <div class="pf-view-thumb" style="aspect-ratio:auto;height:60vh;">
+            <iframe src="${data.url}" loading="lazy" style="width:100%;height:100%;border:0;"></iframe>
+          </div>
+          <div class="pf-view-filename">${escapeHtml(data.fileName || 'PDF')}</div>
+          <a class="pf-view-open" href="${data.url}" target="_blank" rel="noopener">Open ↗</a>
+        `;
+      }
+      return `
+        ${headHtml}
+        <div class="pf-view-thumb" style="font-size:32px;">📄</div>
+        <div class="pf-view-filename">${escapeHtml(data.fileName || 'PDF')}</div>
+        <a class="pf-view-open" href="${data.url}" target="_blank" rel="noopener">Open ↗</a>
+      `;
+    }
+    // STL or generic file
+    return `
+      ${headHtml}
+      <div class="pf-view-thumb" style="font-size:32px;">📦</div>
+      <div class="pf-view-filename">${escapeHtml(data.fileName || 'File')}</div>
+      <a class="pf-view-open" href="${data.url}" target="_blank" rel="noopener">Download ↓</a>
+    `;
+  }
+
+  function openPortfolioLightbox(data, studentName, slotLabel) {
+    if (data.mode !== 'file') return;
+    const ct = (data.contentType || '').toLowerCase();
+    if (ct.startsWith('image/')) {
+      lightboxMedia.innerHTML = `<img src="${data.url}" alt="${escapeHtml(studentName || '')}" />`;
+    } else if (ct.startsWith('video/')) {
+      lightboxMedia.innerHTML = `<video src="${data.url}" controls autoplay></video>`;
+    } else {
+      window.open(data.url, '_blank', 'noopener');
+      return;
+    }
+    lightboxName.textContent = `${studentName || 'Unnamed'} · ${slotLabel}`;
+    lightboxDesc.textContent = data.fileName || '';
+    lightbox.classList.add('open');
+  }
+
+  async function deletePortfolio(item) {
+    try {
+      // Delete any uploaded files
+      const slots = item.slots || {};
+      for (const def of SLOT_DEFS) {
+        const s = slots[def.key];
+        if (s && s.mode === 'file' && s.filePath) {
+          try { await deleteObject(storageRef(storage, s.filePath)); } catch (_) {}
+        }
+      }
+      await deleteDoc(doc(db, 'portfolios', item.id));
+      if (item.benchmarkId) refreshCountBadge(item.benchmarkId);
+    } catch (err) {
+      console.error('portfolio delete failed', err);
+      alert('Could not delete. Try again.');
+    }
+  }
+
+  async function deletePortfolioSlot(item, slotKey) {
+    try {
+      const slots = { ...(item.slots || {}) };
+      const cur = slots[slotKey];
+      if (cur && cur.mode === 'file' && cur.filePath) {
+        try { await deleteObject(storageRef(storage, cur.filePath)); } catch (_) {}
+      }
+      slots[slotKey] = null;
+      // Use setDoc with merge to update only slots
+      await setDoc(doc(db, 'portfolios', item.id), { slots }, { merge: true });
+    } catch (err) {
+      console.error('slot delete failed', err);
+      alert('Could not delete that slot. Try again.');
     }
   }
 
@@ -2145,20 +4722,44 @@
   // ============== ARCHIVE (admin) ==============
   document.getElementById('archiveBtn').addEventListener('click', async () => {
     if (!isAdmin) return;
-    if (!confirm('Archive ALL current submissions and clear the live galleries? Old work stays accessible in Firestore as a snapshot.')) return;
+    if (!confirm('Archive ALL current portfolios and homework artifacts and clear the live galleries? Old work stays accessible in Firestore as a snapshot and viewable from the Archives button.')) return;
+    const note = (prompt('Optional cohort label (e.g. "April 2026 cohort"). Leave blank to skip.', '') || '').trim();
     try {
-      const snap = await getDocs(collection(db, 'artifacts'));
-      if (snap.empty) { alert('Nothing to archive.'); return; }
       const archiveId = new Date().toISOString().replace(/[:.]/g, '-');
-      // copy each to archives/{archiveId}/artifacts/{id}
+      // Portfolios
+      const pfSnap = await getDocs(collection(db, 'portfolios'));
+      const artSnap = await getDocs(collection(db, 'artifacts'));
+      if (pfSnap.empty && artSnap.empty) { alert('Nothing to archive.'); return; }
+
       const copies = [];
-      snap.forEach(d => {
-        copies.push(setDoc(doc(db, 'archives', archiveId, 'artifacts', d.id), d.data()));
-      });
+      pfSnap.forEach(d => copies.push(setDoc(doc(db, 'archives', archiveId, 'portfolios', d.id), d.data())));
+      artSnap.forEach(d => copies.push(setDoc(doc(db, 'archives', archiveId, 'artifacts', d.id), d.data())));
       await Promise.all(copies);
-      // delete originals (Firestore doc + Storage file)
+
+      // Write parent metadata doc — used by the archive viewer's list page.
+      const studentNames = new Set();
+      pfSnap.forEach(d => { const n = d.data().studentName; if (n) studentNames.add(n.trim().toLowerCase()); });
+      artSnap.forEach(d => { const n = d.data().studentName; if (n) studentNames.add(n.trim().toLowerCase()); });
+      await setDoc(doc(db, 'archives', archiveId), {
+        archivedAt: serverTimestamp(),
+        portfolioCount: pfSnap.size,
+        artifactCount: artSnap.size,
+        studentCount: studentNames.size,
+        note: note || ''
+      });
+
       const deletes = [];
-      snap.forEach(d => {
+      pfSnap.forEach(d => {
+        const data = d.data();
+        const slots = data.slots || {};
+        Object.values(slots).forEach(s => {
+          if (s && s.mode === 'file' && s.filePath) {
+            deletes.push(deleteObject(storageRef(storage, s.filePath)).catch(() => {}));
+          }
+        });
+        deletes.push(deleteDoc(doc(db, 'portfolios', d.id)));
+      });
+      artSnap.forEach(d => {
         const data = d.data();
         if (data.filePath) {
           deletes.push(deleteObject(storageRef(storage, data.filePath)).catch(() => {}));
@@ -2166,12 +4767,250 @@
         deletes.push(deleteDoc(doc(db, 'artifacts', d.id)));
       });
       await Promise.all(deletes);
-      alert(`Archived ${snap.size} submissions to archives/${archiveId}.`);
+      // Refresh visible count badges (now zero for everything).
+      Object.keys(countEls).forEach(bid => updateCountBadge(bid, 0));
+      alert(`Archived ${pfSnap.size} portfolios and ${artSnap.size} homework artifacts to archives/${archiveId}.`);
     } catch (err) {
       console.error(err);
       alert('Archive failed. Check console.');
     }
   });
+
+  // ============== ARCHIVE VIEWER (admin) ==============
+  // Per-session cache so re-opening an archive doesn't re-fetch.
+  const _archiveCache = new Map(); // archiveId -> { portfolios: [...], meta: {...} }
+
+  function fmtArchiveDate(d) {
+    if (!d) return '';
+    try {
+      const dt = (d.toDate && d.toDate()) || d;
+      return dt.toISOString().slice(0, 10);
+    } catch (_) { return String(d); }
+  }
+  function archiveTitleFor(meta, archiveId) {
+    if (meta?.note) return meta.note;
+    // Fall back to the readable date portion of the archiveId
+    return `Archive ${archiveId.slice(0, 10)}`;
+  }
+
+  async function openArchivesList() {
+    if (!isAdmin) return;
+    currentBenchmark = null;
+    modalTitle.textContent = 'Class Archives';
+    modalPoints.style.display = 'none';
+    modalBody.classList.remove('is-hw');
+    modalBody.innerHTML = `
+      <div class="modal-section">
+        <p style="color:var(--paper-ink-mid);font-size:14px;margin-bottom:18px;">
+          Read-only snapshots from previous cohorts. Click any archive to browse it.
+        </p>
+        <div class="archive-list" id="archiveList">
+          <div class="archive-list-empty">Loading archives…</div>
+        </div>
+      </div>
+    `;
+    // Tear down any open live listeners first.
+    if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
+    if (unsubscribePortfolios) { unsubscribePortfolios(); unsubscribePortfolios = null; }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    const listEl = document.getElementById('archiveList');
+    try {
+      // Fetch parent docs only — no subcollection scans.
+      const archivesSnap = await getDocs(collection(db, 'archives'));
+      const items = [];
+      archivesSnap.forEach(d => {
+        const data = d.data() || {};
+        // Only include docs that look like a metadata doc (has archivedAt).
+        // Older archives may not have a parent doc — surface them too with a synthetic stub.
+        items.push({ id: d.id, ...data });
+      });
+      // Sort newest first by archiveId (ISO-ish string sorts naturally).
+      items.sort((a, b) => (b.id || '').localeCompare(a.id || ''));
+
+      if (!items.length) {
+        listEl.innerHTML = `<div class="archive-list-empty">No archives yet.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = '';
+      items.forEach(item => {
+        const date = item.archivedAt ? fmtArchiveDate(item.archivedAt) : item.id.slice(0, 10);
+        const title = archiveTitleFor(item, item.id);
+        const meta = [
+          item.studentCount != null ? `${item.studentCount} students` : null,
+          item.portfolioCount != null ? `${item.portfolioCount} portfolios` : null,
+          item.artifactCount != null ? `${item.artifactCount} homework` : null
+        ].filter(Boolean).join(' · ');
+        const row = document.createElement('div');
+        row.className = 'archive-list-item';
+        row.innerHTML = `
+          <div class="archive-info">
+            <div class="archive-title">${escapeHtml(title)}</div>
+            <div class="archive-meta">archived ${escapeHtml(date)}${meta ? ' — ' + escapeHtml(meta) : ''}</div>
+          </div>
+          <span class="archive-caret">▶</span>
+        `;
+        row.addEventListener('click', () => openArchiveDetail(item.id, item));
+        listEl.appendChild(row);
+      });
+    } catch (err) {
+      console.error('archive list failed', err);
+      listEl.innerHTML = `<div class="archive-list-empty">Could not load archives.</div>`;
+    }
+  }
+
+  async function openArchiveDetail(archiveId, metaHint) {
+    if (!isAdmin) return;
+    currentBenchmark = null;
+    modalTitle.textContent = archiveTitleFor(metaHint || {}, archiveId);
+    modalPoints.style.display = 'none';
+    modalBody.classList.remove('is-hw');
+    modalBody.innerHTML = `
+      <div class="modal-section">
+        <div class="archive-banner">
+          <span class="archive-banner-tag">Archive</span>
+          <span>Read-only snapshot. ${escapeHtml(fmtArchiveDate(metaHint?.archivedAt) || archiveId.slice(0, 10))}</span>
+          <div class="archive-banner-actions">
+            <button type="button" data-archive-back>← All archives</button>
+            <button type="button" class="btn-restore" data-archive-restore>Restore to live</button>
+          </div>
+        </div>
+        <div id="archiveDetail">
+          <div class="pf-gallery-empty">Loading…</div>
+        </div>
+      </div>
+    `;
+    // Update URL deep link.
+    try {
+      const sp = new URLSearchParams(location.search);
+      sp.set('admin', ADMIN_TOKEN);
+      sp.set('archive', archiveId);
+      history.replaceState(null, '', `${location.pathname}?${sp.toString()}`);
+    } catch (_) {}
+
+    modalBody.querySelector('[data-archive-back]').addEventListener('click', () => {
+      // Clear the deep link param when going back to the list.
+      try {
+        const sp = new URLSearchParams(location.search);
+        sp.delete('archive');
+        history.replaceState(null, '', `${location.pathname}?${sp.toString()}`);
+      } catch (_) {}
+      openArchivesList();
+    });
+    modalBody.querySelector('[data-archive-restore]').addEventListener('click', () => restoreArchive(archiveId));
+
+    if (!modal.classList.contains('open')) {
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    const detailEl = document.getElementById('archiveDetail');
+    try {
+      let cached = _archiveCache.get(archiveId);
+      if (!cached) {
+        // One-time getDocs — no live listener for archives.
+        const pfSnap = await getDocs(collection(db, 'archives', archiveId, 'portfolios'));
+        const portfolios = [];
+        pfSnap.forEach(d => portfolios.push({ id: d.id, ...d.data() }));
+        cached = { portfolios, meta: metaHint || null };
+        _archiveCache.set(archiveId, cached);
+      }
+      const portfolios = cached.portfolios;
+
+      detailEl.innerHTML = '';
+      // Group archived portfolios by benchmarkId, render in PROJECTS order.
+      const byBenchmark = {};
+      portfolios.forEach(p => {
+        const bid = p.benchmarkId || '_unbound';
+        (byBenchmark[bid] = byBenchmark[bid] || []).push(p);
+      });
+
+      let renderedAny = false;
+      PROJECTS.forEach(project => {
+        const projHasContent = project.benchmarks.some(b => byBenchmark[b.id]?.length);
+        if (!projHasContent) return;
+        renderedAny = true;
+        const projSec = document.createElement('section');
+        projSec.className = 'project';
+        projSec.style.marginBottom = '32px';
+        projSec.innerHTML = `<h2 class="project-title">${escapeHtml(project.title)}</h2>`;
+        const benchWrap = document.createElement('div');
+        benchWrap.className = 'benchmarks';
+        project.benchmarks.forEach(b => {
+          const bucket = byBenchmark[b.id] || [];
+          if (!bucket.length) return;
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-bottom:18px;';
+          wrapper.innerHTML = `
+            <div style="font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-mid);">
+              ${escapeHtml(b.title)} — ${bucket.length} portfolio${bucket.length === 1 ? '' : 's'}
+            </div>
+            <div class="pf-gallery"></div>
+          `;
+          const grid = wrapper.querySelector('.pf-gallery');
+          // Sort alphabetically as in the live view.
+          bucket.sort((a, b) => (a.studentName || '').localeCompare(b.studentName || '', undefined, { sensitivity: 'base' }));
+          renderPortfolioGallery(grid, bucket, { readOnly: true });
+          benchWrap.appendChild(wrapper);
+        });
+        projSec.appendChild(benchWrap);
+        detailEl.appendChild(projSec);
+      });
+
+      if (!renderedAny) {
+        detailEl.innerHTML = `<div class="pf-gallery-empty">This archive has no portfolios.</div>`;
+      }
+    } catch (err) {
+      console.error('archive detail failed', err);
+      detailEl.innerHTML = `<div class="pf-gallery-empty">Could not load this archive.</div>`;
+    }
+  }
+
+  async function restoreArchive(archiveId) {
+    if (!isAdmin) return;
+    if (!confirm(
+      'Restore this archive\'s portfolios to the LIVE collection? This is for accidental archives only — it copies docs back to /portfolios. Proceed?'
+    )) return;
+    try {
+      const cached = _archiveCache.get(archiveId);
+      let portfolios = cached?.portfolios;
+      if (!portfolios) {
+        const pfSnap = await getDocs(collection(db, 'archives', archiveId, 'portfolios'));
+        portfolios = [];
+        pfSnap.forEach(d => portfolios.push({ id: d.id, ...d.data() }));
+      }
+      if (!portfolios.length) { alert('Nothing to restore.'); return; }
+
+      // Strip the archive doc id and write a fresh doc in /portfolios with a
+      // new server timestamp. We DO preserve all slot data including the
+      // existing fileUrl pointers (Storage objects were left in place since
+      // archive doesn't move blobs — they were deleted on archive though, so
+      // file-mode slots may now be broken; the read-side renders a friendly
+      // placeholder for those).
+      const writes = [];
+      portfolios.forEach(p => {
+        const { id, createdAt, ...rest } = p;
+        writes.push(addDoc(collection(db, 'portfolios'), {
+          ...rest,
+          createdAt: serverTimestamp()
+        }));
+      });
+      await Promise.all(writes);
+      // Refresh count badges so admin sees the restore reflected.
+      const benchIds = new Set(portfolios.map(p => p.benchmarkId).filter(Boolean));
+      benchIds.forEach(bid => refreshCountBadge(bid));
+      alert(`Restored ${portfolios.length} portfolios to live. Note: archived files (storage blobs) were deleted at archive time, so file-mode slots may show "(file unavailable)".`);
+    } catch (err) {
+      console.error('restore failed', err);
+      alert('Restore failed. Check console.');
+    }
+  }
+
+  if (isAdmin) {
+    document.getElementById('archivesViewBtn').addEventListener('click', openArchivesList);
+  }
 
   // ============== UTIL ==============
   function escapeHtml(s) {
@@ -2185,8 +5024,21 @@
   if (route === '/hw') {
     document.body.classList.add('view-hw');
     renderHomework();
+  } else if (route === '/progress') {
+    document.body.classList.add('view-progress');
+    renderProgress();
   } else {
     renderProjects();
+  }
+  // Pull initial counts via getCountFromServer (1 read per benchmark).
+  loadInitialCounts();
+  // Deep link to an archive: ?admin=ramsey-aiml&archive=2026-04-15T12-34-56
+  if (isAdmin) {
+    const archiveDeepLink = urlParams.get('archive');
+    if (archiveDeepLink) {
+      // Defer slightly so projects render first.
+      setTimeout(() => openArchiveDetail(archiveDeepLink, null), 50);
+    }
   }
 </script>
 
